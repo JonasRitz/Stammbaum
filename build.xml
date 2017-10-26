@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="accounting" default="archive">
+<project name="accounting" default="execute">
 
   <target name="init">
     <mkdir dir="build/classes"/>
@@ -12,7 +12,7 @@
   </target>
 
   <target name="archive" depends="compile">
-    <jar destfile="dist/accounting.jar"
+    <jar destfile="dist/stammbaum.jar"
         basedir="build/classes"/>
   </target>
 
@@ -23,7 +23,8 @@
 
    <target name="execute" depends="compile">
        <java classpath="build/classes"
-             classname="Main">
+             classname="application.stammbaum.Main"
+       		 fork="true">
        </java>
   </target>
 
