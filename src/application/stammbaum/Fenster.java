@@ -2,87 +2,112 @@ package application.stammbaum;
 import java.util.regex.Pattern;
 import java.io.File;
 import java.util.*;
+
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.border.*;
+
 public class Fenster extends JFrame {
 	private JPanel contentPane;
+	
+	private final int NEW_PERSON = 0;
+	private final int REMOVE_PERSON = 1;
+	private final int SETTINGS_PERSON = 2;
+	private final int NEW_RELATION = 3;
+	private final int REMOVE_RELATION = 4;
+	private final int SETTINGS_RELATION = 5;
+	
+	private final int RETURN = 0;
+	private final int SAVE = 1;
+	private final int OPEN = 2;
+	private final int PRINT = 3;
+	private final int ZOOM = 4;
+	private final int INFO = 5;
+	private final int MANUAl = 6;
+	
 	private ArrayList<JButton> vertical = new ArrayList<>();
 	private ArrayList<JButton> horizontal = new ArrayList<>();
+	private int button_size = 130;
+	
 	public Fenster() {
 		super("Stammbaumeditor");
 	  	this.setVisible(true);
 	  	this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	  	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	  	this.initialisiere_buttons();
+	  	this.initialisiere_alles();
+	  	this.initialisiere_onClickListener();
 	}
 	
-	public void initialisiere_buttons(){
-		JPanel vert_and_hor = new JPanel(new GridBagLayout());
-		/*BoxLayout layout = new BoxLayout(vert_and_hor, BoxLayout.X_AXIS);*/
-		
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		JPanel vert = initialisiere_vertical_buttonbox();
-		vert.setPreferredSize(new Dimension(150, 1300));
-        vert.setMaximumSize(vert.getPreferredSize()); 
-        vert.setMinimumSize(vert.getPreferredSize());
-        vert_and_hor.add(vert, c);
-		
-        /*
+	public void initialisiere_onClickListener(){
+		vertical.get(NEW_PERSON).addActionListener(new action_listener_new_person());
+	}
+
+	
+	public void initialisiere_alles() {
+		Container pane = this.getContentPane();
 		JPanel hor = initialisiere_horizontal_buttonbox();
-		hor.setPreferredSize(new Dimension(6*143, 150));
-        hor.setMaximumSize(hor.getPreferredSize()); 
-        hor.setMinimumSize(hor.getPreferredSize());
-        vert_and_hor.add(hor, c);
-		*/
-		this.add(vert_and_hor);
+		JPanel ver = initialisiere_vertical_buttonbox();
+		JPanel main = create_mainframe();
+		pane.add(hor, BorderLayout.PAGE_START);
+		pane.add(ver, BorderLayout.LINE_START);
+		pane.add(main, BorderLayout.CENTER);
+	
 	}
 	
+	public JPanel create_mainframe(){
+		JPanel sub = new JPanel();
+		Border compound = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
+		sub.setBorder(compound);
+		Toolkit tk = Toolkit.getDefaultToolkit();
+	    Dimension d = tk.getScreenSize();
+	    d.setSize(d.getWidth()-button_size, d.getHeight()-button_size);
+		sub.setMaximumSize(d);
+		sub.setMinimumSize(d);
+		sub.setPreferredSize(d);
+		return sub;
+	}
 	
 	public JPanel initialisiere_vertical_buttonbox(){
-		JPanel container = new JPanel();
-		BoxLayout layout = new BoxLayout(container, BoxLayout.Y_AXIS);
-		container.setLayout(layout);
-	
-		int vertical_button_size = 125;
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(7,1));
 		String vertical_icon_source = "src/data/icons/vertical";
 		this.vertical = new ArrayList<>();  
 		File v = new File(vertical_icon_source);
 		File[] filearray_v = v.listFiles();
+		int counter = 0;
 		for(File files : filearray_v){
 			JButton tmp = new JButton();
 			if(Pattern.matches(".*\\d_.*", files.toString())){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
-				tmp.setIcon(resizeImage(files.toString(), vertical_button_size));
-				container.add(tmp);
+				tmp.setIcon(resizeImage(files.toString(), button_size-30));
 				this.vertical.add(tmp);
+				panel.add(tmp,counter);
+				counter++;
 			}
 		}
-		return container;
+		return panel;
 	}
 	
 	public JPanel initialisiere_horizontal_buttonbox(){
-		JPanel container = new JPanel();
-		BoxLayout layout = new BoxLayout(container, BoxLayout.X_AXIS);
-		container.setLayout(layout);
-	
-		int horizontal_button_size = 125;
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 6));
 		String horizontal_icon_source = "src/data/icons/horizontal";
 		this.horizontal = new ArrayList<>();
 		File h = new File(horizontal_icon_source);
 		File[] filearray_h = h.listFiles();
+		int counter = 0;
 		for(File files : filearray_h){
 			JButton tmp = new JButton();
 			if(Pattern.matches(".*\\d_.*", files.toString())){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
-				tmp.setIcon(resizeImage(files.toString(), horizontal_button_size));
-				container.add(tmp);
+				tmp.setIcon(resizeImage(files.toString(), button_size));
 				this.horizontal.add(tmp);
+				panel.add(tmp,counter);
+				counter++;
 			}
 		}
-		return container;
+		return panel;
 	}
 	
 	public ImageIcon resizeImage(String name, int size){
@@ -92,5 +117,6 @@ public class Fenster extends JFrame {
 		imageIcon = new ImageIcon(newimg); 
 		return imageIcon; // diese und zwei Zeilen darüber: Skalieren das Bild auf gewünschte Pixelgröße
 	}
+	
 
 }
