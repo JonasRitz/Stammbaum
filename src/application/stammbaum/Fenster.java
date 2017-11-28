@@ -77,11 +77,12 @@ public class Fenster extends JFrame {
 		this.vertical = new ArrayList<>();  
 		File v = new File(vertical_icon_source);
 		File[] filearray_v = v.listFiles();
+		String[] filearray = sortiereArray(filearray_v);
 		int counter = 0;
-		for(File files : filearray_v){
+		for(String files : filearray){
 			JButton tmp = new JButton();
-			if(Pattern.matches(".*\\d_.*", files.toString())){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
-				tmp.setIcon(resizeImage(files.toString(), button_size-30));
+			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
+				tmp.setIcon(resizeImage(files, button_size-30));
 				this.vertical.add(tmp);
 				panel.add(tmp,counter);
 				counter++;
@@ -97,17 +98,27 @@ public class Fenster extends JFrame {
 		this.horizontal = new ArrayList<>();
 		File h = new File(horizontal_icon_source);
 		File[] filearray_h = h.listFiles();
+		String[] filearray = sortiereArray(filearray_h);
 		int counter = 0;
-		for(File files : filearray_h){
+		for(String files : filearray){
 			JButton tmp = new JButton();
-			if(Pattern.matches(".*\\d_.*", files.toString())){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
-				tmp.setIcon(resizeImage(files.toString(), button_size));
+			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
+				tmp.setIcon(resizeImage(files, button_size));
 				this.horizontal.add(tmp);
 				panel.add(tmp,counter);
 				counter++;
 			}
 		}
 		return panel;
+	}
+	
+	public String[] sortiereArray(File[] filearray){
+		String sorted[] = new String[filearray.length];
+		for(int i=0; i<filearray.length; i++){
+			sorted[i] = filearray[i].toString();
+		}
+		Arrays.sort(sorted);
+		return sorted;
 	}
 	
 	public ImageIcon resizeImage(String name, int size){
