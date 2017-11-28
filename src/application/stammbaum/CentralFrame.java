@@ -7,10 +7,9 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class CentralFrame extends JFrame {
+public class CentralFrame extends JPanel {
 
 	private ImageIcon icon;
-	private Container c;
 	private GridBagLayout layout;
 	private ArrayList<JComponent> personen;
 	public int count = 0;
@@ -20,19 +19,9 @@ public class CentralFrame extends JFrame {
 
 	// Konstruktor
 	public CentralFrame(){
-		super("Stammbaumeditor");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		this.icon = this.setIcon("src/data/icons/vertical/2_new_person.png");
+		this.icon = this.setIcon("src/data/icons/vertical/1_new_person.png");
 		this.personen = new ArrayList<>();
-
-		this.c = getContentPane();
-		this.c.setPreferredSize(this.c.getMaximumSize());
-
-		//JScrollPane scroll = new JScrollPane(this.c);
-		//scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		//scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		//this.getContentPane().add(scroll);
 
 		JButton add = new JButton("Add Person");
 		add.addActionListener(new ActionListener() {
@@ -43,8 +32,8 @@ public class CentralFrame extends JFrame {
 			}
 		});
 		this.layout = new GridBagLayout();
-		this.c.setLayout(this.layout);
-		this.c.add(add);
+		this.setLayout(this.layout);
+		this.add(add);
 		this.setSize(500, 500);
 		this.setVisible(true);
 	}
@@ -93,12 +82,9 @@ public class CentralFrame extends JFrame {
 		}
 		g.gridx = x;
 		g.gridy = y;
-		this.c.add(person, g);
+		this.add(person, g);
 		this.setVisible(true);
-		if (x >= 3) {
-			this.drawAll = true;
-			this.addRelationship();
-		}
+		
 	}
 
 	// Beziehung hinzufuegen
@@ -106,14 +92,19 @@ public class CentralFrame extends JFrame {
 
 		if(!this.drawAll) return;
 
-		this.c.getGraphics().drawLine(0,100,200,300);
-		//this.c.getGraphics().drawLine((int)this.personen.get(1).getLocation().getX()+this.personen.get(1).getWidth(), (int)this.personen.get(1).getLocation().getY()+50, (int)this.personen.get(2).getLocation().getX(), (int)this.personen.get(2).getLocation().getY()+50);
+		this.drawArcs(0, 0, 500, 500);
 		this.setVisible(true);
+	}
+	
+	public void drawArcs(int x1, int y1, int x2, int y2) {
+		Graphics g = this.getGraphics();
+        //Graphics2D g2 = (Graphics2D) g;
+        g.drawLine(x1,  y1,  x2,  y2);
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		this.addRelationship();
+		this.drawArcs(0, 0, 400, 400);
 	}
 }

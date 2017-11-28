@@ -10,6 +10,6 @@ public class Main extends JFrame{
   }
   
   public static void erstelle_fenster(){
-		Fenster f = new Fenster();
+	  Fenster f = new Fenster();
   }
 }

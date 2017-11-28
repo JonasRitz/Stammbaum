@@ -58,7 +58,7 @@ public class Fenster extends JFrame {
 	}
 	
 	public JPanel create_mainframe(){
-		JPanel sub = new JPanel();
+		CentralFrame sub = new CentralFrame();
 		Border compound = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
 		sub.setBorder(compound);
 		Toolkit tk = Toolkit.getDefaultToolkit();
