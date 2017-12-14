@@ -25,9 +25,9 @@ public class CentralFrame extends JPanel {
 
 		JButton add = new JButton("Add Person");
 		add.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("hallo");
 				addPerson("<html>Vorname Nachname<br>* TT.MM.JJJJ</html>", icon, 1);
 			}
 		});
@@ -63,10 +63,9 @@ public class CentralFrame extends JPanel {
 
 	// Person hinzufuegen
 	protected void addPerson(String infos, ImageIcon icon, int beziehung) {
-
 		JLabel person = this.setLabel(infos, icon);
 		personen.add(person);
-
+		
 		x += 1;
 
 		GridBagConstraints g = new GridBagConstraints();
@@ -84,7 +83,6 @@ public class CentralFrame extends JPanel {
 		g.gridy = y;
 		this.add(person, g);
 		this.setVisible(true);
-		
 	}
 
 	// Beziehung hinzufuegen

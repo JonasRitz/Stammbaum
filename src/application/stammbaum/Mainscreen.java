@@ -10,11 +10,11 @@ import java.awt.event.*;
 
 import javax.swing.border.*;
 
-public class Fenster extends JFrame {
+public class Mainscreen extends JFrame {
 	private JPanel contentPane;
-	
+	private Stammbaum stammbaum;
 	private final int NEW_PERSON = 0;
-	private final int REMOVE_PERSON = 1;
+	private final int DELETE_PERSON = 1;
 	private final int SETTINGS_PERSON = 2;
 	private final int NEW_RELATION = 3;
 	private final int REMOVE_RELATION = 4;
@@ -32,20 +32,21 @@ public class Fenster extends JFrame {
 	private ArrayList<JButton> horizontal = new ArrayList<>();
 	private int button_size = 130;
 	
-	public Fenster() {
+	public Mainscreen() {
 		super("Stammbaumeditor");
-	  	this.setVisible(true);
+		stammbaum = new Stammbaum();
 	  	this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	  	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	  	this.initialisiere_alles();
 	  	this.initialisiere_onClickListener();
+	  	this.setVisible(true);
 	}
 	
 	public void initialisiere_onClickListener(){
-		vertical.get(NEW_PERSON).addActionListener(new action_listener_new_person());
+		vertical.get(NEW_PERSON).addActionListener(new New_person_onclick(this.stammbaum));
+		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this.stammbaum));
 	}
 
-	
 	public void initialisiere_alles() {
 		Container pane = this.getContentPane();
 		JPanel hor = initialisiere_horizontal_buttonbox();
@@ -83,6 +84,7 @@ public class Fenster extends JFrame {
 			JButton tmp = new JButton();
 			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
 				tmp.setIcon(resizeImage(files, button_size-30));
+				tmp.setFocusPainted(false);
 				this.vertical.add(tmp);
 				panel.add(tmp,counter);
 				counter++;
@@ -104,6 +106,7 @@ public class Fenster extends JFrame {
 			JButton tmp = new JButton();
 			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
 				tmp.setIcon(resizeImage(files, button_size));
+				tmp.setFocusPainted(false);
 				this.horizontal.add(tmp);
 				panel.add(tmp,counter);
 				counter++;
@@ -121,7 +124,7 @@ public class Fenster extends JFrame {
 		return sorted;
 	}
 	
-	public ImageIcon resizeImage(String name, int size){
+	public static ImageIcon resizeImage(String name, int size){
 		ImageIcon imageIcon = new ImageIcon(name);
 		Image image = imageIcon.getImage();
 		Image newimg = image.getScaledInstance(size, size,  java.awt.Image.SCALE_SMOOTH); 
