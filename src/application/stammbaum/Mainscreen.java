@@ -49,7 +49,6 @@ public class Mainscreen extends JFrame {
 		
 		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
 		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
-		horizontal.get(PRINT).addActionListener(new Print_onclick(this));
 	}
 
 	public void initialisiere_alles() {
@@ -80,13 +79,15 @@ public class Mainscreen extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(7,1));
 		String vertical_icon_source = "src/data/icons/vertical";
-		this.vertical = new ArrayList<>();  
+		this.vertical = new ArrayList<>();  		
 		File v = new File(vertical_icon_source);
 		File[] filearray_v = v.listFiles();
 		String[] filearray = sortiereArray(filearray_v);
+		String[] text = {"Person hinzufügen", "Person entfernen", "Person bearbeiten", "Beziehung hinzufügen", "Beziehung entfernen", "Beziehung bearbeiten", "Beziehungsgeflecht"};
 		int counter = 0;
 		for(String files : filearray){
 			JButton tmp = new JButton();
+			tmp.setToolTipText(text[counter]);
 			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
 				tmp.setIcon(resizeImage(files, button_size-30));
 				tmp.setFocusPainted(false);
@@ -106,9 +107,11 @@ public class Mainscreen extends JFrame {
 		File h = new File(horizontal_icon_source);
 		File[] filearray_h = h.listFiles();
 		String[] filearray = sortiereArray(filearray_h);
+		String text[] = {"Zurück", "Stammbaum speichern", "Stammbaum öffnen", "Stammbaum drucken", "Zoom", "Info", "Benutzerhandbuch"};
 		int counter = 0;
 		for(String files : filearray){
 			JButton tmp = new JButton();
+			tmp.setToolTipText(text[counter]);
 			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
 				tmp.setIcon(resizeImage(files, button_size));
 				tmp.setFocusPainted(false);
