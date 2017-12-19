@@ -11,7 +11,6 @@ public class CentralFrame extends JPanel {
 
 	private ImageIcon icon;
 	private GridBagLayout layout;
-	private ArrayList<JComponent> personen;
 	public int count = 0;
 	private boolean drawAll = false;
 	private int x;
@@ -21,19 +20,8 @@ public class CentralFrame extends JPanel {
 	public CentralFrame(){
 
 		this.icon = this.setIcon("src/data/icons/vertical/1_new_person.png");
-		this.personen = new ArrayList<>();
-
-		JButton add = new JButton("Add Person");
-		add.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("hallo");
-				addPerson("<html>Vorname Nachname<br>* TT.MM.JJJJ</html>", icon, 1);
-			}
-		});
 		this.layout = new GridBagLayout();
 		this.setLayout(this.layout);
-		this.add(add);
 		this.setSize(500, 500);
 		this.setVisible(true);
 	}
@@ -62,26 +50,12 @@ public class CentralFrame extends JPanel {
 	}
 
 	// Person hinzufuegen
-	protected void addPerson(String infos, ImageIcon icon, int beziehung) {
+	protected void addPerson(String infos/*, ImageIcon icon, int beziehung*/) {
 		JLabel person = this.setLabel(infos, icon);
-		personen.add(person);
-		
-		x += 1;
 
 		GridBagConstraints g = new GridBagConstraints();
-		// Person zu Eltern
-		if (beziehung == 1) {
-			x = 1;
-			y += 1;
-			g.insets = new Insets(100, 100, 0, 0);
-		}
-		// Person zu Partner/Geschwistern
-		else {
-			g.insets = new Insets(0, 100, 0, 0);
-		}
-		g.gridx = x;
-		g.gridy = y;
-		this.add(person, g);
+		g.anchor = GridBagConstraints.FIRST_LINE_START;
+		this.layout.addLayoutComponent(person, g);
 		this.setVisible(true);
 	}
 
