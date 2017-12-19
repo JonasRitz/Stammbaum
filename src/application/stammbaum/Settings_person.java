@@ -22,39 +22,28 @@ import java.awt.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Delete_Person extends JOptionPane {
-	private Stammbaum stammbaum;
-	private ArrayList<Person> zwischenspeicher; // enthaelt alle gelöschten Personen um im Falle von Cancel diese wieder dem Stammbaum hinzuzufuegen
+public class Settings_person extends JOptionPane {
+	public Stammbaum stammbaum;
 	private JList liste;
 	private DefaultListModel model;
-	public Delete_Person(Stammbaum stammbaum) {
+	public Settings_person(Stammbaum stammbaum) {
 		this.stammbaum = stammbaum;
-		zwischenspeicher = new ArrayList<Person>();
-		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/2_delete_person.png", 50);
+		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(2,1));
 		addSelectionList(layout);
-		addRemoveButton(layout);
-	    int result = this.showConfirmDialog(null, layout, "Entferne eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
-	    if (result != this.OK_OPTION) {
-	    		addPersonsAgain();
+		addSettingsButton(layout);
+	    int result = this.showConfirmDialog(null, layout, "Bearbeite eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
+	    if (result == this.OK_OPTION) {
+	    		
 	    }
 	}
 	
-	public void addPersonsAgain(){
-		for(Person p : zwischenspeicher){
-			stammbaum.personHinzufuegen(p);
-		}
-	}
-	
-	public void addRemoveButton(JPanel layout){
-		JButton b = new JButton("Person Löschen");
+	public void addSettingsButton(JPanel layout){
+		JButton b = new JButton("Person bearbeiten");
 		layout.add(b);
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();
-				zwischenspeicher.add(stammbaum.getPersonen().get(index));
-				model.remove(index);
-				stammbaum.personLoeschen(index);
 			}
 		});
 	}
@@ -70,7 +59,6 @@ public class Delete_Person extends JOptionPane {
 		Border compound = BorderFactory.createTitledBorder(niceBorder, "Person auswählen");
 		liste.setBorder(compound);
 		layout.add(liste);
-		
 	}
 
 }
