@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Open_onclick implements ActionListener {
-
 	JFrame parent;
 	public Open_onclick(JFrame parent){
 		this.parent = parent;
