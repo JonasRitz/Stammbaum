@@ -47,6 +47,7 @@ public class Mainscreen extends JFrame {
 		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this.stammbaum));
 		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
 		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
+		horizontal.get(PRINT).addActionListener(new Print_onclick(this));
 	}
 
 	public void initialisiere_alles() {
