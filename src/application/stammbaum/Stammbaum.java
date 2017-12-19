@@ -12,7 +12,7 @@ public class Stammbaum{
 	public void personHinzufuegen(Person p){
 		personen.add(p);
 		System.out.println("Es wurde dem Stammbaum eine Person hinzugefuegt.");
-		c.addPerson("<html>" + p + "</html>");
+		c.addPerson(p);
 	}
 	
 	public void personLoeschen(int index){
