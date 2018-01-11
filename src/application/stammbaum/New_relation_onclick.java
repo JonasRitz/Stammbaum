@@ -1,8 +1,10 @@
 package application.stammbaum;
+
+import java.io.FileReader;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.io.File;
 import java.util.*;
-
 import javax.swing.*;
 
 import java.awt.*;

@@ -2,6 +2,8 @@ package application.stammbaum;
 import java.util.*;
 public class Stammbaum{
 	private ArrayList<Person> personen;
+	private ArrayList<Beziehung> beziehungen;
+	
 	private CentralFrame c;
 	
 	public Stammbaum(){
@@ -21,5 +23,9 @@ public class Stammbaum{
 	
 	public ArrayList<Person> getPersonen(){
 		return personen;
+	}
+	
+	public ArrayList<Beziehung> getBeziehungen(){
+		return beziehungen;
 	}
 }

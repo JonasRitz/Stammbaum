@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import javafx.application.Application;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.*;
@@ -59,7 +60,7 @@ public class New_Person extends JOptionPane {
 		String ges = (String)geschlecht.getSelectedItem();
 		
 		String file = null;
-		if(resultOfFileSelection != 0){
+		if(resultOfFileSelection == JFileChooser.APPROVE_OPTION){
 			file = choose.getSelectedFile().getAbsolutePath();
 		}
 		LocalDate geburtsdatum = null;
@@ -68,8 +69,8 @@ public class New_Person extends JOptionPane {
 		}
 		
 		LocalDate sterbedatum = null;
-		if(year.getSelectedItem()!=null && month.getSelectedItem()!=null && day.getSelectedItem()!=null){
-			sterbedatum = LocalDate.of((int)year.getSelectedItem(), (int)month.getSelectedItem(), (int)day.getSelectedItem());
+		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
+			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)yearDied.getSelectedItem(), (int)yearDied.getSelectedItem());
 		}
 		
 		stammbaum.personHinzufuegen(new Person(vor, nach, ges, file, geburtsdatum, sterbedatum));

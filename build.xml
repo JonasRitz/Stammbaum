@@ -8,7 +8,11 @@
 
   <target name="compile" depends="init">
     <javac includeAntRuntime="false" srcdir="src" destdir="build/classes"
-    debug="true" debuglevel="lines,vars,source"/>
+    debug="true" debuglevel="lines,vars,source">
+      <classpath>
+        <pathelement path="./lib/json-simple-1.1.1.jar"/>
+      </classpath>
+    </javac>
   </target>
 
   <target name="archive" depends="compile">
@@ -21,10 +25,13 @@
     <delete dir="dist"/>
   </target>
 
+
    <target name="execute" depends="compile">
-       <java classpath="build/classes"
-             classname="application.stammbaum.Main"
-       		 fork="true">
+       <java fork="true" classname="application.stammbaum.Main">
+         <classpath>
+              <pathelement path="./lib/json-simple-1.1.1.jar"/>
+              <pathelement path="build/classes"/>
+       		</classpath>
        </java>
   </target>
 
