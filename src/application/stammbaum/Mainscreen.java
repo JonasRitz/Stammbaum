@@ -12,6 +12,8 @@ import javax.swing.border.*;
 
 public class Mainscreen extends JFrame {
 	private JPanel contentPane;
+	protected CentralFrame central;
+	
 	private Stammbaum stammbaum;
 	private final int NEW_PERSON = 0;
 	private final int DELETE_PERSON = 1;
@@ -43,7 +45,7 @@ public class Mainscreen extends JFrame {
 	}
 	
 	public void initialisiere_onClickListener(){
-		vertical.get(NEW_PERSON).addActionListener(new New_person_onclick(this.stammbaum));
+		vertical.get(NEW_PERSON).addActionListener(new New_person_onclick(this.stammbaum, this.central));
 		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this.stammbaum));
 		vertical.get(SETTINGS_PERSON).addActionListener(new Settings_person_onclick(this.stammbaum));
 		vertical.get(NEW_RELATION).addActionListener(new New_relation_onclick(this.stammbaum));
@@ -55,15 +57,14 @@ public class Mainscreen extends JFrame {
 		Container pane = this.getContentPane();
 		JPanel hor = initialisiere_horizontal_buttonbox();
 		JPanel ver = initialisiere_vertical_buttonbox();
-		JPanel main = create_mainframe();
+		this.central = create_mainframe();
 		pane.add(hor, BorderLayout.PAGE_START);
 		pane.add(ver, BorderLayout.LINE_START);
-		pane.add(main, BorderLayout.CENTER);
-	
+		pane.add(this.central, BorderLayout.CENTER);
 	}
 	
-	public JPanel create_mainframe(){
-		CentralFrame sub = new CentralFrame();
+	public CentralFrame create_mainframe(){
+		CentralFrame sub = new CentralFrame(this);
 		Border compound = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
 		sub.setBorder(compound);
 		Toolkit tk = Toolkit.getDefaultToolkit();

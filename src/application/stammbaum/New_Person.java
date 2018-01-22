@@ -24,13 +24,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class New_Person extends JOptionPane {
 	private Stammbaum stammbaum;
+	protected CentralFrame central;
 	private JTextField vorname;
 	private JTextField nachname;
 	private JComboBox<String> geschlecht;
 	private JButton openButton;
 	private JButton birth;
 	private JFileChooser choose;
-	private int resultOfFileSelection;
+	private int resultOfFileSelection = JFileChooser.CANCEL_OPTION;
 	private JComboBox<Integer> day;
 	private JComboBox<Integer> month;
 	private JComboBox<Integer> year;
@@ -39,8 +40,9 @@ public class New_Person extends JOptionPane {
 	private JComboBox<Integer> yearDied;
 	
 	
-	public New_Person(Stammbaum stammbaum) {
+	public New_Person(Stammbaum stammbaum, CentralFrame central) {
 		this.stammbaum = stammbaum;
+		this.central = central;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/1_new_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(6,2));
 		addFields(layout);
@@ -70,10 +72,11 @@ public class New_Person extends JOptionPane {
 		
 		LocalDate sterbedatum = null;
 		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
-			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)yearDied.getSelectedItem(), (int)yearDied.getSelectedItem());
+			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)monthDied.getSelectedItem(), (int)dayDied.getSelectedItem());
 		}
-		
-		stammbaum.personHinzufuegen(new Person(vor, nach, ges, file, geburtsdatum, sterbedatum));
+		Person p1 = new Person(vor, nach, ges, file, geburtsdatum, sterbedatum);
+		stammbaum.personHinzufuegen(p1);
+		central.addPerson(p1);
 	}
 	
 	public void addFields(JPanel layout){
