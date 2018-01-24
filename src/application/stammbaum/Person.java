@@ -1,6 +1,9 @@
 package application.stammbaum;
 import java.time.LocalDate;
+
+
 public class Person{
+	static int counter;
 	private String vorname;
 	private String nachname;
 	private String geschlecht;
@@ -9,7 +12,6 @@ public class Person{
 	private LocalDate sterbedatum;
 	
 	public Person(){}
-	
 	public Person(String vorname, String nachname, String geschlecht, String imageSource, LocalDate geburtsdatum, LocalDate sterbedatum){
 		System.out.println("Es wurde eine Person erzeugt");
 		this.vorname = vorname;
@@ -19,7 +21,7 @@ public class Person{
 		this.geburtsdatum = geburtsdatum;
 		this.sterbedatum = sterbedatum;
 	}
-	
+
 	public String getVorname(){
 		return this.vorname;
 	}

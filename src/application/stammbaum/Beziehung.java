@@ -5,14 +5,26 @@ public class Beziehung{
 	protected Person mutter;
 	protected ArrayList<Person> kinder;
 	
-	public Beziehung(Person mutter, Person Vater){
+	public Beziehung(Person vater, Person mutter){
 		this.mutter = mutter;
-		this.vater = Vater;
+		this.vater = vater;
+		System.out.println("Mutter: " + this.mutter.getVorname() + "Vater: " + this.vater.getVorname());
 		kinder = new ArrayList<Person>();
+	}
+	
+	public Person getVater(){
+		return vater;
+	}
+	
+	public Person getMutter(){
+		return mutter;
 	}
 	
 	public void KindHinzufuegen(Person p){
 		kinder.add(p);
 	}
 	
+	public ArrayList<Person> getKinder(){
+		return kinder;
+	}
 }

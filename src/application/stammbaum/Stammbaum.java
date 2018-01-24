@@ -3,7 +3,6 @@ import java.util.*;
 public class Stammbaum{
 	private ArrayList<Person> personen;
 	private ArrayList<Beziehung> beziehungen;
-	
 	public Stammbaum(){
 		System.out.println("Es wurde ein Stammbaum erzeugt");
 		personen = new ArrayList<>();

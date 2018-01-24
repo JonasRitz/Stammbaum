@@ -38,6 +38,7 @@ public class New_Relation extends JOptionPane {
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/4_new_relation.png", 50);
 		JPanel layout = new JPanel(new GridLayout(1,3));
 		addAllSelections(layout);
+		personenListenErstellen();
 	    int result = this.showConfirmDialog(null, layout, "Füge eine Beziehung hinzu: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result == this.OK_OPTION) {
 	    		if(vater.getSelectedIndex() != -1 && mutter.getSelectedIndex() != -1 && kinder.getSelectedIndices().length != 0){
@@ -48,6 +49,17 @@ public class New_Relation extends JOptionPane {
 	    			stammbaum.beziehungHinzufuegen(b);
 	    		}
 	    }
+	}
+	
+	public void personenListenErstellen(){
+		for(Person p: stammbaum.getPersonen()){
+			if(p.getGeschlecht().equals("männlich")){
+				väter_p.add(p);
+			}else if(p.getGeschlecht().equals("weiblich")){
+				mütter_p.add(p);
+			}
+			kinder_p.add(p);
+		}
 	}
 	
 	public void addAllSelections(JPanel layout){
@@ -69,17 +81,11 @@ public class New_Relation extends JOptionPane {
 		model = new DefaultListModel();
 		for(Person pers : pers_arr_list){
 			if(!who.equals("Kinder")){
-				if(who.equals("Vater")){
-					väter_p.add(pers);
-				}else{
-					mütter_p.add(pers);
-				}
 				if(pers.getGeschlecht().equals(geschlecht(who))){
 					model.addElement(pers.toString());
 				}
 			}else{
 				model.addElement(pers.toString());
-				kinder_p.add(pers);
 			}
 		}
 		JList liste = new JList(model);

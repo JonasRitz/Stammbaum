@@ -46,6 +46,7 @@ public class Save_onclick implements ActionListener {
 	
 	public JSONObject convert_Stammbaum_to_Json(){
 		JSONObject all = new JSONObject();
+		
 		JSONArray personen = new JSONArray();
 		for(Person p : stammbaum.getPersonen()){
 			JSONObject einePerson = new JSONObject();
@@ -55,12 +56,27 @@ public class Save_onclick implements ActionListener {
 			einePerson.put("imageSource", p.getImageSource());
 			einePerson.put("geburtsdatum", p.getGeburtsdatum());
 			einePerson.put("sterbedatum", p.getSterbedatum());
+			einePerson.put("id", stammbaum.getPersonen().indexOf(p));
 			personen.add(einePerson);
 		}
 		all.put("Personen", personen);
 		
-		//TODO: Beziehungen zu einer JSON Datei konvertieren
-		
+		JSONArray beziehungen = new JSONArray();
+		for(Beziehung b : stammbaum.getBeziehungen()){
+			JSONObject eineBeziehung = new JSONObject();
+			System.out.println("Vater Index: " + stammbaum.getPersonen().indexOf(b.getVater()));
+			System.out.println("Mutter Index: " + stammbaum.getPersonen().indexOf(b.getMutter()));
+			
+			eineBeziehung.put("vater", stammbaum.getPersonen().indexOf(b.getVater()));
+			eineBeziehung.put("mutter", stammbaum.getPersonen().indexOf(b.getMutter()));
+			JSONArray kinder = new JSONArray();
+			for(Person p : b.getKinder()){
+				kinder.add(stammbaum.getPersonen().indexOf(p));
+			}
+			eineBeziehung.put("kinder", kinder);
+			beziehungen.add(eineBeziehung);
+		}
+		all.put("Beziehungen", beziehungen);
 		return all;
 	}
 }
