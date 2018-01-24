@@ -70,7 +70,6 @@ public class Delete_Person extends JOptionPane {
 		Border compound = BorderFactory.createTitledBorder(niceBorder, "Person auswählen");
 		liste.setBorder(compound);
 		layout.add(liste);
-		
 	}
 
 }
