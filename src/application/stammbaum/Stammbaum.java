@@ -4,15 +4,20 @@ public class Stammbaum{
 	private ArrayList<Person> personen;
 	private ArrayList<Beziehung> beziehungen;
 	
-	
 	public Stammbaum(){
 		System.out.println("Es wurde ein Stammbaum erzeugt");
 		personen = new ArrayList<>();
+		beziehungen = new ArrayList<>();
 	}
 	
 	public void personHinzufuegen(Person p){
 		personen.add(p);
 		System.out.println("Es wurde dem Stammbaum eine Person hinzugefuegt.");
+	}
+	
+	public void beziehungHinzufuegen(Beziehung b){
+		beziehungen.add(b);
+		System.out.println("Es wurde dem Stammbaum eine Beziehung hinzugefuegt.");
 	}
 	
 	public void personLoeschen(int index){

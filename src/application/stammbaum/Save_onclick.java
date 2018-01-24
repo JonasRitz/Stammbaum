@@ -1,11 +1,15 @@
 package application.stammbaum;
 
 import java.awt.event.ActionEvent;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.awt.event.ActionListener;
 import java.io.*;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -24,8 +28,14 @@ public class Save_onclick implements ActionListener {
 		int result = chooser.showSaveDialog(parent);
 		if(result == JFileChooser.APPROVE_OPTION) {
 			JSONObject obj = convert_Stammbaum_to_Json();
-			try (FileWriter file = new FileWriter(chooser.getSelectedFile().getAbsolutePath())) {
-				System.out.println(obj.toJSONString());
+			/* Wenn der Nutzer die Datei .json nennt kein .json anhängen, sonst schon */
+			String dateiname = chooser.getSelectedFile().getAbsolutePath();
+			Pattern pattern = Pattern.compile(".*\\.json");
+			Matcher matcher = pattern.matcher(dateiname);
+			if(!matcher.matches()){
+				dateiname += ".json";
+			}
+			try (FileWriter file = new FileWriter(dateiname)) {
 				file.write(obj.toJSONString());
 	            file.flush();
 	        } catch (IOException error) {
