@@ -64,9 +64,6 @@ public class Save_onclick implements ActionListener {
 		JSONArray beziehungen = new JSONArray();
 		for(Beziehung b : stammbaum.getBeziehungen()){
 			JSONObject eineBeziehung = new JSONObject();
-			System.out.println("Vater Index: " + stammbaum.getPersonen().indexOf(b.getVater()));
-			System.out.println("Mutter Index: " + stammbaum.getPersonen().indexOf(b.getMutter()));
-			
 			eineBeziehung.put("vater", stammbaum.getPersonen().indexOf(b.getVater()));
 			eineBeziehung.put("mutter", stammbaum.getPersonen().indexOf(b.getMutter()));
 			JSONArray kinder = new JSONArray();

@@ -8,7 +8,6 @@ public class Beziehung{
 	public Beziehung(Person vater, Person mutter){
 		this.mutter = mutter;
 		this.vater = vater;
-		System.out.println("Mutter: " + this.mutter.getVorname() + "Vater: " + this.vater.getVorname());
 		kinder = new ArrayList<Person>();
 	}
 	

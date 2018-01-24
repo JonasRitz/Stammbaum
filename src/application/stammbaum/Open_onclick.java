@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -48,6 +49,7 @@ public class Open_onclick implements ActionListener {
 	}
 	/*
 	JSONObject all = new JSONObject();
+	
 	JSONArray personen = new JSONArray();
 	for(Person p : stammbaum.getPersonen()){
 		JSONObject einePerson = new JSONObject();
@@ -57,12 +59,28 @@ public class Open_onclick implements ActionListener {
 		einePerson.put("imageSource", p.getImageSource());
 		einePerson.put("geburtsdatum", p.getGeburtsdatum());
 		einePerson.put("sterbedatum", p.getSterbedatum());
+		einePerson.put("id", stammbaum.getPersonen().indexOf(p));
 		personen.add(einePerson);
 	}
 	all.put("Personen", personen);
+	
+	JSONArray beziehungen = new JSONArray();
+	for(Beziehung b : stammbaum.getBeziehungen()){
+		JSONObject eineBeziehung = new JSONObject();
+		eineBeziehung.put("vater", stammbaum.getPersonen().indexOf(b.getVater()));
+		eineBeziehung.put("mutter", stammbaum.getPersonen().indexOf(b.getMutter()));
+		JSONArray kinder = new JSONArray();
+		for(Person p : b.getKinder()){
+			kinder.add(stammbaum.getPersonen().indexOf(p));
+		}
+		eineBeziehung.put("kinder", kinder);
+		beziehungen.add(eineBeziehung);
+	}
+	all.put("Beziehungen", beziehungen);
 	*/
 	
 	public Stammbaum convert_Json_to_Stammbaum(Object obj){
+		
 		JSONObject jsonObject = (JSONObject) obj;
 		System.out.println(jsonObject);
 		return new Stammbaum();
