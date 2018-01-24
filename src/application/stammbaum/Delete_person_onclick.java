@@ -13,11 +13,14 @@ import java.awt.event.ActionEvent;
 
 public class Delete_person_onclick implements ActionListener{
 	Stammbaum stammbaum;
-	public Delete_person_onclick(Stammbaum stammbaum){
+	CentralFrame central;
+	
+	public Delete_person_onclick(Stammbaum stammbaum, CentralFrame central){
 		this.stammbaum = stammbaum;
+		this.central = central;
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		Delete_Person p = new Delete_Person(this.stammbaum);
+		Delete_Person p = new Delete_Person(this.stammbaum, this.central);
 	}
 }

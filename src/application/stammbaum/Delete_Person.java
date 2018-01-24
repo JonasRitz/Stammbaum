@@ -27,8 +27,11 @@ public class Delete_Person extends JOptionPane {
 	private ArrayList<Person> zwischenspeicher; // enthaelt alle gelöschten Personen um im Falle von Cancel diese wieder dem Stammbaum hinzuzufuegen
 	private JList liste;
 	private DefaultListModel model;
-	public Delete_Person(Stammbaum stammbaum) {
+	private CentralFrame central;
+	
+	public Delete_Person(Stammbaum stammbaum, CentralFrame central) {
 		this.stammbaum = stammbaum;
+		this.central = central;
 		zwischenspeicher = new ArrayList<Person>();
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/2_delete_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(2,1));
@@ -53,6 +56,7 @@ public class Delete_Person extends JOptionPane {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();
 				zwischenspeicher.add(stammbaum.getPersonen().get(index));
+				central.removePerson(stammbaum.getPersonen().get(index));
 				model.remove(index);
 				stammbaum.personLoeschen(index);
 			}
