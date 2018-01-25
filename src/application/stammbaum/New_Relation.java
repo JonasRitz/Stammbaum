@@ -33,7 +33,7 @@ public class New_Relation extends JOptionPane {
 	
 	private DefaultListModel model;
 	
-	public New_Relation(Stammbaum stammbaum) {
+	public New_Relation(Stammbaum stammbaum, CentralFrame central) {
 		this.stammbaum = stammbaum;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/4_new_relation.png", 50);
 		JPanel layout = new JPanel(new GridLayout(1,3));
@@ -47,6 +47,7 @@ public class New_Relation extends JOptionPane {
 	    				b.KindHinzufuegen(kinder_p.get(i));
 	    			}
 	    			stammbaum.beziehungHinzufuegen(b);
+	    			central.addRelation(b);
 	    		}
 	    }
 	}
