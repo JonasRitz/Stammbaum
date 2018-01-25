@@ -80,7 +80,6 @@ public class Open_onclick implements ActionListener {
 	*/
 	
 	public Stammbaum convert_Json_to_Stammbaum(Object obj){
-		
 		JSONObject jsonObject = (JSONObject) obj;
 		System.out.println(jsonObject);
 		return new Stammbaum();

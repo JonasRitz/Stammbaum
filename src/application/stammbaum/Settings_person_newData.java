@@ -52,7 +52,7 @@ public class Settings_person_newData extends JOptionPane {
 	    		if(!vorname.getText().equals("") && vorname.getText()!=null && !nachname.getText().equals("") && nachname.getText()!=null){
 	    			getDataInserted();
 	    		}else{
-	    			JOptionPane.showMessageDialog(this, "Person konnte aufgrund unzureichender Informationen nicht geaendert werden.", "", JOptionPane.ERROR_MESSAGE);
+	    			JOptionPane.showMessageDialog(this, "Person konnte aufgrund unzureichender Informationen nicht geändert werden.", "", JOptionPane.ERROR_MESSAGE);
 	    		}
 	    }
 	}
@@ -65,7 +65,10 @@ public class Settings_person_newData extends JOptionPane {
 		String file = null;
 		if(resultOfFileSelection == JFileChooser.APPROVE_OPTION){
 			file = choose.getSelectedFile().getAbsolutePath();
+		}else{
+			file = toEdit.getImageSource();
 		}
+		
 		LocalDate geburtsdatum = null;
 		if(year.getSelectedItem()!=null && month.getSelectedItem()!=null && day.getSelectedItem()!=null){
 			geburtsdatum = LocalDate.of((int)year.getSelectedItem(), (int)month.getSelectedItem(), (int)day.getSelectedItem());
@@ -75,8 +78,10 @@ public class Settings_person_newData extends JOptionPane {
 		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
 			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)monthDied.getSelectedItem(), (int)dayDied.getSelectedItem());
 		}
+		int index = stammbaum.getPersonen().indexOf(toEdit);
+		stammbaum.getPersonen().remove(toEdit);
 		Person p1 = new Person(vor, nach, ges, file, geburtsdatum, sterbedatum);
-		stammbaum.personHinzufuegen(p1);
+		stammbaum.getPersonen().add(index, p1);
 	}
 	
 	public void addFields(JPanel layout){
@@ -90,7 +95,7 @@ public class Settings_person_newData extends JOptionPane {
 	
 	public void addNachnameField(JPanel layout){
 		nachname = new JTextField(5);
-		nachname.setText(toEdit.getVorname());
+		nachname.setText(toEdit.getNachname());
 		layout.add(new JLabel("Nachname:"));
 	    layout.add(nachname);
 	}
@@ -105,7 +110,7 @@ public class Settings_person_newData extends JOptionPane {
 	public void addGeschlechterAuswahl(JPanel layout){
 		String geschlechter[] = {"weiblich", "männlich", "X"};
 		geschlecht = new JComboBox<>(geschlechter);
-		geschlecht.setSelectedIndex(0);
+		geschlecht.setSelectedItem(toEdit.getGeschlecht());
 	    layout.add(new JLabel("Geschlecht:"));
 	    layout.add(geschlecht);
 	}
@@ -126,20 +131,18 @@ public class Settings_person_newData extends JOptionPane {
 	
 	public void addGeburtsDatumAuswahl(JPanel layout){
 		layout.add(new JLabel("Geburtsdatum: "));
-		
 		Box birthdate = Box.createHorizontalBox();
+		
 		day = new JComboBox<Integer>();
 		for(int i=1; i<=31; i++){
 			day.insertItemAt(i, i-1);
 		}
-		day.setSelectedIndex(-1);
 		birthdate.add(day);
 		
 		month = new JComboBox<Integer>();
 		for(int i=1; i<=12; i++){
 			month.insertItemAt(i, i-1);
 		}
-		month.setSelectedIndex(-1);
 		birthdate.add(month);
 		
 		
@@ -148,7 +151,17 @@ public class Settings_person_newData extends JOptionPane {
 		for(int i=aktuellesJahr; i>=0; i--){
 			year.insertItemAt(i, aktuellesJahr-i);
 		}
-		year.setSelectedIndex(-1);
+		
+		if(toEdit.getGeburtsdatum() == null){
+			day.setSelectedIndex(-1);
+			month.setSelectedIndex(-1);
+			year.setSelectedIndex(-1);
+		}else{
+			day.setSelectedIndex(toEdit.getGeburtsdatum().getDayOfMonth()-1);
+			month.setSelectedIndex(toEdit.getGeburtsdatum().getMonthValue()-1);
+			year.setSelectedIndex(aktuellesJahr - toEdit.getGeburtsdatum().getYear());
+		}
+		
 		birthdate.add(year);
 
 		layout.add(birthdate);
@@ -163,25 +176,32 @@ public class Settings_person_newData extends JOptionPane {
 		for(int i=1; i<=31; i++){
 			dayDied.insertItemAt(i, i-1);
 		}
-		dayDied.setSelectedIndex(-1);
 		deathdate.add(dayDied);
 		
 		monthDied = new JComboBox<Integer>();
 		for(int i=1; i<=12; i++){
 			monthDied.insertItemAt(i, i-1);
 		}
-		monthDied.setSelectedIndex(-1);
 		deathdate.add(monthDied);
-		
 		
 		int aktuellesJahr = Calendar.getInstance().get(Calendar.YEAR);
 		yearDied = new JComboBox<Integer>();
 		for(int i=aktuellesJahr; i>=0; i--){
 			yearDied.insertItemAt(i, aktuellesJahr-i);
 		}
-		yearDied.setSelectedIndex(-1);
-		deathdate.add(yearDied);
 
+		
+		if(toEdit.getSterbedatum() == null){
+			dayDied.setSelectedIndex(-1);
+			monthDied.setSelectedIndex(-1);
+			yearDied.setSelectedIndex(-1);
+		}else{
+			dayDied.setSelectedIndex(toEdit.getSterbedatum().getDayOfMonth()-1);
+			monthDied.setSelectedIndex(toEdit.getSterbedatum().getMonthValue()-1);
+			yearDied.setSelectedIndex(aktuellesJahr - toEdit.getSterbedatum().getYear());
+		}
+		
+		deathdate.add(yearDied);
 		layout.add(deathdate);
 	    
 	}
