@@ -2,17 +2,33 @@ package application.stammbaum;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
 import javax.swing.*;
+
 import java.time.format.DateTimeFormatter;
+
 import javax.swing.border.LineBorder;
 
 public class CentralFrame extends JPanel {
-	protected JFrame parent;
+	
+	private JFrame parent;
 	private HashMap<Person, JLabel> persons;
 	// Konstruktor
 	public CentralFrame(JFrame parent){
 		this.parent = parent;
 		this.persons = new HashMap<>();
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		Box b1 = Box.createHorizontalBox();
+		b1.setAlignmentX(Box.CENTER_ALIGNMENT);
+		
+		Box b2 = Box.createHorizontalBox();
+		b2.setAlignmentX(Box.CENTER_ALIGNMENT);
+		
+		b1.add(new JLabel("hey"));
+		b2.add(new JLabel("ho"));
+		this.add(b1);
+		this.add(b2);
 		this.setVisible(true);
 	}
 
@@ -47,6 +63,7 @@ public class CentralFrame extends JPanel {
 		infos += "<html>";
 		// Label erstellen
 		JLabel label = new JLabel(infos, SwingConstants.CENTER);
+		label.setPreferredSize(new Dimension(100, 100));
 		label.setVerticalTextPosition(JLabel.CENTER);
 		label.setHorizontalTextPosition(JLabel.RIGHT);
 		label.setBorder(new LineBorder(Color.BLACK, 1, true));
@@ -58,16 +75,6 @@ public class CentralFrame extends JPanel {
 		this.add(label);
 		this.persons.put(p, label);
 		this.parent.setVisible(true);
-		
-		if (this.persons.size() >= 3) {
-			Person[] personen = new Person[3];
-			int i = 0;
-			for (Person pers: this.persons.keySet()) {
-				personen[i] = pers;
-				i++;
-			}
-			addBeziehung(personen[0], personen[1], personen[2]);
-		}
 	}
 	
 	protected void removePerson(Person p) {
@@ -109,10 +116,10 @@ public class CentralFrame extends JPanel {
 	
 	// Beziehung hinzufuegen
 	// ueber Beziehung auf Person auf JLabels zugreifen --> Positionen
-	protected void addBeziehung(Person vater, Person mutter, Person kind) {
+	protected void addRelation(Beziehung b) {
 		
-		Point pos_v = this.persons.get(vater).getLocation();
-		Point pos_m = this.persons.get(vater).getLocation();
+		Point pos_v = this.persons.get(b.vater).getLocation();
+		Point pos_m = this.persons.get(b.mutter).getLocation();
 		ImageIcon icon = this.setIcon("src/data/icons/source/strich.png");
 		this.add(new JLabel(icon));
 		
