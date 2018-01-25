@@ -13,8 +13,8 @@ import javax.swing.border.*;
 public class Mainscreen extends JFrame {
 	private JPanel contentPane;
 	protected CentralFrame central;
+	public Stammbaum stammbaum;
 	
-	private Stammbaum stammbaum;
 	private final int NEW_PERSON = 0;
 	private final int DELETE_PERSON = 1;
 	private final int SETTINGS_PERSON = 2;

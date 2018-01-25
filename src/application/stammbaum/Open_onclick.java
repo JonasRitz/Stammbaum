@@ -27,10 +27,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class Open_onclick implements ActionListener {
-	JFrame parent;
+	Mainscreen main;
 	Stammbaum stammbaum;
-	public Open_onclick(JFrame parent, Stammbaum stammbaum){
-		this.parent = parent;
+	public Open_onclick(Mainscreen main, Stammbaum stammbaum){
+		this.main = main;
 		this.stammbaum = stammbaum;
 	}
 	
@@ -38,12 +38,14 @@ public class Open_onclick implements ActionListener {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Stammbaum (*.json) ", "json");
 		chooser.setFileFilter(filter);
-		int result = chooser.showOpenDialog(parent);
+		int result = chooser.showOpenDialog(main);
 		if(result == JFileChooser.APPROVE_OPTION) {
 			try{
 				JSONParser parser = new JSONParser();
 				Object obj = parser.parse(new FileReader(chooser.getSelectedFile().getAbsolutePath()));
-				convert_Json_to_Stammbaum(obj);
+				Stammbaum baum = convert_Json_to_Stammbaum(obj);
+				main.stammbaum = baum;
+				main.central.refreshAll(baum);
 	        } catch (IOException error) {
 	            error.printStackTrace();
 	        } catch (ParseException errorParse){
@@ -64,7 +66,7 @@ public class Open_onclick implements ActionListener {
 			String geschlecht = (String) person.get("geschlecht");
 			String imageSource = (String) person.get("imageSource");
 			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate geburtsdatum = null;
 			if(! ((String) person.get("geburtsdatum")).equals("null")){
 				String date = (String) person.get("geburtsdatum");
@@ -81,12 +83,16 @@ public class Open_onclick implements ActionListener {
 		JSONArray beziehungen = (JSONArray) jsonObject.get("Beziehungen");
 		for(int i =0; i<beziehungen.size(); i++){
 			JSONObject bez = (JSONObject) beziehungen.get(i);
-			Person vater = stammbaum.getPersonen().get((int)bez.get("vater"));
-			Person mutter = stammbaum.getPersonen().get((int)bez.get("mutter"));
+			int vater_id = ((Long) bez.get("vater")).intValue();
+			int mutter_id = ((Long) bez.get("mutter")).intValue();
+			Person vater = stammbaum.getPersonen().get(vater_id);
+			Person mutter = stammbaum.getPersonen().get(mutter_id);
 			Beziehung b1 = new Beziehung(vater, mutter);
 			JSONArray kinder = (JSONArray) bez.get("kinder");
+			
 			for(int j=0; j<kinder.size(); j++){
-				b1.KindHinzufuegen(stammbaum.getPersonen().get((int)kinder.get(i)));
+				int kind_id = ((Long) kinder.get(i)).intValue();
+				b1.KindHinzufuegen(stammbaum.getPersonen().get(kind_id));
 			}
 			stammbaum.beziehungHinzufuegen(b1);
 		}

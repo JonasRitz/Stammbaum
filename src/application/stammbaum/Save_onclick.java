@@ -54,8 +54,17 @@ public class Save_onclick implements ActionListener {
 			einePerson.put("nachname", p.getNachname());
 			einePerson.put("geschlecht", p.getGeschlecht());
 			einePerson.put("imageSource", p.getImageSource());
-			einePerson.put("geburtsdatum", p.getGeburtsdatum());
-			einePerson.put("sterbedatum", p.getSterbedatum());
+			if(p.getGeburtsdatum() != null){
+				einePerson.put("geburtsdatum", p.getGeburtsdatum().toString());
+			}else{
+				einePerson.put("geburtsdatum", null);
+			}
+			
+			if(p.getGeburtsdatum() != null){
+				einePerson.put("sterbedatum", p.getGeburtsdatum().toString());
+			}else{
+				einePerson.put("sterbedatum", null);
+			}
 			einePerson.put("id", stammbaum.getPersonen().indexOf(p));
 			personen.add(einePerson);
 		}
