@@ -1,5 +1,7 @@
 package application.stammbaum;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -16,6 +18,8 @@ import java.util.Iterator;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import jdk.nashorn.internal.runtime.JSONListAdapter;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,42 +51,46 @@ public class Open_onclick implements ActionListener {
 	        }
 		}
 	}
-	/*
-	JSONObject all = new JSONObject();
-	
-	JSONArray personen = new JSONArray();
-	for(Person p : stammbaum.getPersonen()){
-		JSONObject einePerson = new JSONObject();
-		einePerson.put("vorname", p.getVorname());
-		einePerson.put("nachname", p.getNachname());
-		einePerson.put("geschlecht", p.getGeschlecht());
-		einePerson.put("imageSource", p.getImageSource());
-		einePerson.put("geburtsdatum", p.getGeburtsdatum());
-		einePerson.put("sterbedatum", p.getSterbedatum());
-		einePerson.put("id", stammbaum.getPersonen().indexOf(p));
-		personen.add(einePerson);
-	}
-	all.put("Personen", personen);
-	
-	JSONArray beziehungen = new JSONArray();
-	for(Beziehung b : stammbaum.getBeziehungen()){
-		JSONObject eineBeziehung = new JSONObject();
-		eineBeziehung.put("vater", stammbaum.getPersonen().indexOf(b.getVater()));
-		eineBeziehung.put("mutter", stammbaum.getPersonen().indexOf(b.getMutter()));
-		JSONArray kinder = new JSONArray();
-		for(Person p : b.getKinder()){
-			kinder.add(stammbaum.getPersonen().indexOf(p));
-		}
-		eineBeziehung.put("kinder", kinder);
-		beziehungen.add(eineBeziehung);
-	}
-	all.put("Beziehungen", beziehungen);
-	*/
 	
 	public Stammbaum convert_Json_to_Stammbaum(Object obj){
+		Stammbaum stammbaum = new Stammbaum();
 		JSONObject jsonObject = (JSONObject) obj;
-		System.out.println(jsonObject);
-		return new Stammbaum();
+		
+		JSONArray personen = (JSONArray) jsonObject.get("Personen");
+		for(int i =0; i<personen.size(); i++){
+			JSONObject person = (JSONObject) personen.get(i);
+			String vorname = (String) person.get("vorname");
+			String nachname = (String) person.get("nachname");
+			String geschlecht = (String) person.get("geschlecht");
+			String imageSource = (String) person.get("imageSource");
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+			LocalDate geburtsdatum = null;
+			if(! ((String) person.get("geburtsdatum")).equals("null")){
+				String date = (String) person.get("geburtsdatum");
+				geburtsdatum = LocalDate.parse(date, formatter);
+			}
+			LocalDate sterbedatum = null;
+			if(! ((String) person.get("sterbedatum")).equals("null")){
+				String date = (String) person.get("sterbedatum");
+				sterbedatum = LocalDate.parse(date, formatter);
+			}
+			stammbaum.personHinzufuegen(new Person(vorname, nachname, geschlecht, imageSource, geburtsdatum, sterbedatum));
+		}
+		
+		JSONArray beziehungen = (JSONArray) jsonObject.get("Beziehungen");
+		for(int i =0; i<beziehungen.size(); i++){
+			JSONObject bez = (JSONObject) beziehungen.get(i);
+			Person vater = stammbaum.getPersonen().get((int)bez.get("vater"));
+			Person mutter = stammbaum.getPersonen().get((int)bez.get("mutter"));
+			Beziehung b1 = new Beziehung(vater, mutter);
+			JSONArray kinder = (JSONArray) bez.get("kinder");
+			for(int j=0; j<kinder.size(); j++){
+				b1.KindHinzufuegen(stammbaum.getPersonen().get((int)kinder.get(i)));
+			}
+			stammbaum.beziehungHinzufuegen(b1);
+		}
+		return stammbaum;
 	}
 	
 }
