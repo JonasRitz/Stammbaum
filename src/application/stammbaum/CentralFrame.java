@@ -7,18 +7,15 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.border.LineBorder;
 
 public class CentralFrame extends JPanel {
-	public int count = 0;
-	private boolean drawAll = false;
-	private int x;
-	private int y;
 	protected JFrame parent;
 	private HashMap<Person, JLabel> persons;
 	
 	// Konstruktor
 	public CentralFrame(JFrame parent){
 		this.parent = parent;
-		this.setVisible(true);
 		this.persons = new HashMap<>();
+		this.setLayout(new GridBagLayout());
+		this.setVisible(true);
 	}
 
 	// Icon skalieren
@@ -38,7 +35,10 @@ public class CentralFrame extends JPanel {
 
 	// Person hinzufuegen
 	protected void addPerson(Person p) {
+		
+		// Bild auslesen
 		String src = p.getImageSource();
+		// Infos auslesen
 		String infos = "<html>" + p;
 		if (p.getGeburtsdatum() != null) {
 			infos += "<p>* " + p.getGeburtsdatum().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "</p>";
@@ -47,6 +47,7 @@ public class CentralFrame extends JPanel {
 			infos += "<p>+" + p.getSterbedatum().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "</p>";
 		}
 		infos += "<html>";
+		// Label erstellen
 		JLabel label = new JLabel(infos, SwingConstants.CENTER);
 		label.setVerticalTextPosition(JLabel.CENTER);
 		label.setHorizontalTextPosition(JLabel.RIGHT);
@@ -60,14 +61,14 @@ public class CentralFrame extends JPanel {
 		this.persons.put(p, label);
 		this.parent.setVisible(true);
 		
-		if (this.persons.size() >= 2) {
-			JLabel[] labels = new JLabel[2];
+		if (this.persons.size() >= 3) {
+			Person[] personen = new Person[3];
 			int i = 0;
 			for (Person pers: this.persons.keySet()) {
-				labels[i] = this.persons.get(pers);
+				personen[i] = pers;
 				i++;
 			}
-			addBeziehung(labels[0], labels[1]);
+			addBeziehung(personen[0], personen[1], personen[2]);
 		}
 	}
 	
@@ -110,17 +111,13 @@ public class CentralFrame extends JPanel {
 	
 	// Beziehung hinzufuegen
 	// ueber Beziehung auf Person auf JLabels zugreifen --> Positionen
-	protected void addBeziehung(JLabel l1, JLabel l2) {
+	protected void addBeziehung(Person vater, Person mutter, Person kind) {
 		
-		Insets insets = this.getInsets();
-		Dimension size = l1.getPreferredSize();
-		l1.setBounds(25 + insets.left, 5 + insets.top, size.width, size.height);
+		Point pos_v = this.persons.get(vater).getLocation();
+		Point pos_m = this.persons.get(vater).getLocation();
+		ImageIcon icon = this.setIcon("src/data/icons/source/strich.png");
+		this.add(new JLabel(icon));
 		
-		size = l2.getPreferredSize();
-		l2.setBounds(55 + insets.left, 40 + insets.top, size.width, size.height);
-		
-		Graphics g = this.getGraphics();
-		g.drawLine(l1.getLocation().x, l1.getLocation().y, l2.getLocation().x, l2.getLocation().y);
-		this.parent.repaint();
+		this.parent.setVisible(true);
 	}
 }
