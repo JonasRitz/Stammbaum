@@ -47,19 +47,14 @@ public class CentralFrame extends JPanel {
 			infos += "<p>+" + p.getSterbedatum().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "</p>";
 		}
 		infos += "<html>";
-		JLabel label;
-		if (src == null) {
-			label = new JLabel(infos, SwingConstants.CENTER);
-			label.setVerticalTextPosition(JLabel.CENTER);
-			label.setHorizontalTextPosition(JLabel.RIGHT);
-			label.setBorder(new LineBorder(Color.BLACK, 1, true));
-		} else {
+		JLabel label = new JLabel(infos, SwingConstants.CENTER);
+		label.setVerticalTextPosition(JLabel.CENTER);
+		label.setHorizontalTextPosition(JLabel.RIGHT);
+		label.setBorder(new LineBorder(Color.BLACK, 1, true));
+		if (src != null) {
 			ImageIcon icon = this.setIcon(src);
-			label = new JLabel(infos, icon, SwingConstants.CENTER);
+			label.setIcon(icon);
 			label.setIconTextGap(10);
-			label.setVerticalTextPosition(JLabel.CENTER);
-			label.setHorizontalTextPosition(JLabel.RIGHT);
-			label.setBorder(new LineBorder(Color.BLACK, 1, true));
 		}
 		this.add(label);
 		this.persons.put(p, label);
@@ -88,12 +83,42 @@ public class CentralFrame extends JPanel {
 		this.parent.repaint();
 	}
 	
+	protected void editPerson(Person p) {
+		
+		for (Person pers: this.persons.keySet()) {
+			if (pers == p) {
+				String src = p.getImageSource();
+				String infos = "<html>" + p;
+				if (p.getGeburtsdatum() != null) {
+					infos += "<p>* " + p.getGeburtsdatum().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "</p>";
+				}
+				if (p.getSterbedatum() != null) {
+					infos += "<p>+" + p.getSterbedatum().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "</p>";
+				}
+				infos += "<html>";
+				this.persons.get(p).setText(infos);
+				if (src != null) {
+					ImageIcon icon = this.setIcon(src);
+					this.persons.get(p).setIcon(icon);
+					this.persons.get(p).setIconTextGap(10);
+				}
+				break;
+			}
+		}
+		this.parent.repaint();		
+	}
+	
 	// Beziehung hinzufuegen
 	// ueber Beziehung auf Person auf JLabels zugreifen --> Positionen
 	protected void addBeziehung(JLabel l1, JLabel l2) {
 		
-		System.out.println(l1.getLocation());
-		System.out.println(l2.getLocation());
+		Insets insets = this.getInsets();
+		Dimension size = l1.getPreferredSize();
+		l1.setBounds(25 + insets.left, 5 + insets.top, size.width, size.height);
+		
+		size = l2.getPreferredSize();
+		l2.setBounds(55 + insets.left, 40 + insets.top, size.width, size.height);
+		
 		Graphics g = this.getGraphics();
 		g.drawLine(l1.getLocation().x, l1.getLocation().y, l2.getLocation().x, l2.getLocation().y);
 		this.parent.repaint();
