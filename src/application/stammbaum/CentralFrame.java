@@ -10,8 +10,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.border.LineBorder;
 
 public class CentralFrame extends JPanel {
-	
-	private JFrame parent;
+	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	private Box box1;
 	private Box box2;
@@ -20,7 +19,7 @@ public class CentralFrame extends JPanel {
 	private ArrayList<Box> boxes;
 
 	// Konstruktor
-	public CentralFrame(JFrame parent){
+	public CentralFrame(Mainscreen parent){
 		this.draw = false;
 		this.parent = parent;
 		this.persons = new HashMap<>();
@@ -40,6 +39,15 @@ public class CentralFrame extends JPanel {
 		this.add(box2);
 		this.setVisible(true);
 	}
+	
+	protected void refreshAll(Stammbaum baum){
+		for(int i=0; i<baum.getPersonen().size(); i++){
+			addPerson(baum.getPersonen().get(i));
+		}
+		for(int i=0; i<baum.getBeziehungen().size(); i++){
+			addRelation(baum.getBeziehungen().get(i));
+		}
+	}
 
 	// Icon skalieren
 	protected ImageIcon setIcon(String file) {
@@ -58,7 +66,6 @@ public class CentralFrame extends JPanel {
 
 	// Person hinzufuegen
 	protected void addPerson(Person p) {
-		
 		// Bild auslesen
 		String src = p.getImageSource();
 		// Infos auslesen
