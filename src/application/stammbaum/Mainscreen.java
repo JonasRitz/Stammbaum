@@ -44,6 +44,15 @@ public class Mainscreen extends JFrame {
 	  	this.setVisible(true);
 	}
 	
+	public void remove_onClickListener(){
+		vertical.get(NEW_PERSON).removeActionListener(vertical.get(NEW_PERSON).getActionListeners()[0]);
+		vertical.get(DELETE_PERSON).removeActionListener(vertical.get(DELETE_PERSON).getActionListeners()[0]);
+		vertical.get(SETTINGS_PERSON).removeActionListener(vertical.get(SETTINGS_PERSON).getActionListeners()[0]);
+		vertical.get(NEW_RELATION).removeActionListener(vertical.get(NEW_RELATION).getActionListeners()[0]);
+		horizontal.get(SAVE).removeActionListener(horizontal.get(SAVE).getActionListeners()[0]);
+		horizontal.get(OPEN).removeActionListener(horizontal.get(OPEN).getActionListeners()[0]);
+	}
+	
 	public void initialisiere_onClickListener(){
 		vertical.get(NEW_PERSON).addActionListener(new New_person_onclick(this.stammbaum, this.central));
 		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this.stammbaum, this.central));

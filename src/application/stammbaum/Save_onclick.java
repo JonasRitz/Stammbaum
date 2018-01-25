@@ -57,13 +57,13 @@ public class Save_onclick implements ActionListener {
 			if(p.getGeburtsdatum() != null){
 				einePerson.put("geburtsdatum", p.getGeburtsdatum().toString());
 			}else{
-				einePerson.put("geburtsdatum", null);
+				einePerson.put("geburtsdatum", "null");
 			}
 			
-			if(p.getGeburtsdatum() != null){
-				einePerson.put("sterbedatum", p.getGeburtsdatum().toString());
+			if(p.getSterbedatum() != null){
+				einePerson.put("sterbedatum", p.getSterbedatum().toString());
 			}else{
-				einePerson.put("sterbedatum", null);
+				einePerson.put("sterbedatum", "null");
 			}
 			einePerson.put("id", stammbaum.getPersonen().indexOf(p));
 			personen.add(einePerson);

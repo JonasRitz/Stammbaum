@@ -26,8 +26,8 @@ public class CentralFrame extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.boxes = new ArrayList<Box>();
-		this.boxes.add()
-		box = Box.createHorizontalBox();
+		//this.boxes.add()
+		box1 = Box.createHorizontalBox();
 		box1.setAlignmentX(Box.CENTER_ALIGNMENT);
 		box1.add(Box.createVerticalGlue());
 		
@@ -40,7 +40,11 @@ public class CentralFrame extends JPanel {
 		this.setVisible(true);
 	}
 	
-	protected void refreshAll(Stammbaum baum){
+	protected void refreshAll(Stammbaum baum, Stammbaum old){
+		for(int i=0; i<old.getPersonen().size(); i++){
+			removePerson(old.getPersonen().get(i));
+		}
+		//TODO REMOVE RELATION METHODE
 		for(int i=0; i<baum.getPersonen().size(); i++){
 			addPerson(baum.getPersonen().get(i));
 		}
@@ -97,7 +101,6 @@ public class CentralFrame extends JPanel {
 	}
 	
 	protected void removePerson(Person p) {
-		
 		for (Person pers: this.persons.keySet()) {
 			if (pers == p) {
 				this.remove(this.persons.get(p));
@@ -109,7 +112,6 @@ public class CentralFrame extends JPanel {
 	}
 	
 	protected void editPerson(Person p) {
-		
 		for (Person pers: this.persons.keySet()) {
 			if (pers == p) {
 				String src = p.getImageSource();

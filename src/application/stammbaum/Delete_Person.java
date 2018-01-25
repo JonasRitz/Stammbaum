@@ -46,6 +46,7 @@ public class Delete_Person extends JOptionPane {
 	public void addPersonsAgain(){
 		for(Person p : zwischenspeicher){
 			stammbaum.personHinzufuegen(p);
+			central.addPerson(p);
 		}
 	}
 	
@@ -59,6 +60,7 @@ public class Delete_Person extends JOptionPane {
 				central.removePerson(stammbaum.getPersonen().get(index));
 				model.remove(index);
 				stammbaum.personLoeschen(index);
+				stammbaum.personEntfernen(stammbaum.getPersonen().get(index));
 			}
 		});
 	}

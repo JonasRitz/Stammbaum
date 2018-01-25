@@ -45,7 +45,10 @@ public class Open_onclick implements ActionListener {
 				Object obj = parser.parse(new FileReader(chooser.getSelectedFile().getAbsolutePath()));
 				Stammbaum baum = convert_Json_to_Stammbaum(obj);
 				main.stammbaum = baum;
-				main.central.refreshAll(baum);
+				main.central.refreshAll(baum, stammbaum);
+				main.remove_onClickListener();
+				main.initialisiere_onClickListener();
+				
 	        } catch (IOException error) {
 	            error.printStackTrace();
 	        } catch (ParseException errorParse){
@@ -68,10 +71,12 @@ public class Open_onclick implements ActionListener {
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate geburtsdatum = null;
+			
 			if(! ((String) person.get("geburtsdatum")).equals("null")){
 				String date = (String) person.get("geburtsdatum");
 				geburtsdatum = LocalDate.parse(date, formatter);
 			}
+			
 			LocalDate sterbedatum = null;
 			if(! ((String) person.get("sterbedatum")).equals("null")){
 				String date = (String) person.get("sterbedatum");
