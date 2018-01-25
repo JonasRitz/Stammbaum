@@ -17,6 +17,7 @@ public class CentralFrame extends JPanel {
 	private Box box2;
 	private Beziehung b;
 	private boolean draw;
+	private ArrayList<Box> boxes;
 
 	// Konstruktor
 	public CentralFrame(JFrame parent){
@@ -25,7 +26,9 @@ public class CentralFrame extends JPanel {
 		this.persons = new HashMap<>();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		box1 = Box.createHorizontalBox();
+		this.boxes = new ArrayList<Box>();
+		this.boxes.add()
+		box = Box.createHorizontalBox();
 		box1.setAlignmentX(Box.CENTER_ALIGNMENT);
 		box1.add(Box.createVerticalGlue());
 		
@@ -123,6 +126,7 @@ public class CentralFrame extends JPanel {
 		this.parent.repaint();		
 	}
 	
+	
 	// Beziehung hinzufuegen
 	protected void addRelation(Beziehung b) {
 		
@@ -138,7 +142,7 @@ public class CentralFrame extends JPanel {
 		this.parent.setVisible(true);
 	}
 	
-	 @Override
+	 /*@Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.draw) {
@@ -153,5 +157,5 @@ public class CentralFrame extends JPanel {
         	this.repaint();
         }
         
-    }
+    }*/
 }
