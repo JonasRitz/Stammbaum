@@ -90,7 +90,7 @@ public class Mainscreen extends JFrame {
 			JButton tmp = new JButton();
 			tmp.setToolTipText(text[counter]);
 			if(Pattern.matches(".*\\d_.*", files)){ // filtert Filenames, in denen [0-9]_ vorkommt, d.h. nur die Icons (dauert en bissl)
-				tmp.setIcon(resizeImage(files, button_size-30));
+				tmp.setIcon(resizeImage(files, button_size-80));
 				tmp.setFocusPainted(false);
 				this.vertical.add(tmp);
 				panel.add(tmp,counter);
