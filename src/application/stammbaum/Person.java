@@ -1,7 +1,11 @@
 package application.stammbaum;
 import java.time.LocalDate;
+<<<<<<< HEAD
 
 
+=======
+//import java.time.format.DateTimeFormatter;
+>>>>>>> f05e1d1dba9314dd894b42523b649a46d8289d7b
 public class Person{
 	static int counter;
 	private String vorname;
