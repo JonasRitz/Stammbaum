@@ -26,10 +26,12 @@ public class CentralFrame extends JPanel {
 		
 		box1 = Box.createHorizontalBox();
 		box1.setAlignmentX(Box.CENTER_ALIGNMENT);
+		box1.add(Box.createVerticalGlue());
 		
 		box2 = Box.createHorizontalBox();
 		box2.setAlignmentX(Box.CENTER_ALIGNMENT);
-		
+		box2.add(Box.createVerticalGlue());
+
 		this.add(box1);
 		this.add(box2);
 		this.setVisible(true);
@@ -133,11 +135,12 @@ public class CentralFrame extends JPanel {
 		
 		this.draw = true;
 		this.b = b;
-		this.parent.pack();
-		Point pos_v = this.persons.get(b.vater).getLocation();
-		Point pos_m = this.persons.get(b.mutter).getLocation();
-    	System.out.println(pos_v + " " + pos_m);
-		
+		for (Person kind: b.kinder) {
+    		JLabel label = this.persons.get(kind);
+    		this.box2.add(label);
+    		this.box2.add(Box.createRigidArea(new Dimension(100,25)));
+    		this.box1.remove(label);
+    	}
 		this.paintComponent(this.getGraphics());
 		this.parent.setVisible(true);
 	}
@@ -147,8 +150,14 @@ public class CentralFrame extends JPanel {
         super.paintComponent(g);
         if (this.draw) {
         	
-        	//g.drawLine(pos_v.x, pos_v.y+50, pos_m.x, pos_m.y+50);
-        	//this.repaint();
+        	Point pos_v = this.persons.get(b.vater).getLocation();
+    		Point pos_m = this.persons.get(b.mutter).getLocation();
+    		if (pos_v.x > pos_m.x) {
+    			g.drawLine(pos_v.x, pos_v.y+50, pos_m.x, pos_m.y+50);
+    		} else {
+    			g.drawLine(pos_v.x, pos_v.y+50, pos_m.x, pos_m.y+50);
+    		}
+        	this.repaint();
         }
         
     }
