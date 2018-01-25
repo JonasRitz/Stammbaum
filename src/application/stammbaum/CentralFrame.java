@@ -9,12 +9,10 @@ import javax.swing.border.LineBorder;
 public class CentralFrame extends JPanel {
 	protected JFrame parent;
 	private HashMap<Person, JLabel> persons;
-	
 	// Konstruktor
 	public CentralFrame(JFrame parent){
 		this.parent = parent;
 		this.persons = new HashMap<>();
-		this.setLayout(new GridBagLayout());
 		this.setVisible(true);
 	}
 

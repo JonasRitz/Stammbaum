@@ -39,11 +39,12 @@ public class Settings_person_newData extends JOptionPane {
 	private JComboBox<Integer> dayDied;
 	private JComboBox<Integer> monthDied;
 	private JComboBox<Integer> yearDied;
+	private CentralFrame centralFrame;
 	
-	
-	public Settings_person_newData(Stammbaum stammbaum, Person toEdit) {
+	public Settings_person_newData(Stammbaum stammbaum, Person toEdit, CentralFrame frame) {
 		this.stammbaum = stammbaum;
 		this.toEdit = toEdit;
+		this.centralFrame = frame;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(6,2));
 		addFields(layout);
@@ -78,10 +79,13 @@ public class Settings_person_newData extends JOptionPane {
 		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
 			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)monthDied.getSelectedItem(), (int)dayDied.getSelectedItem());
 		}
-		int index = stammbaum.getPersonen().indexOf(toEdit);
-		stammbaum.getPersonen().remove(toEdit);
-		Person p1 = new Person(vor, nach, ges, file, geburtsdatum, sterbedatum);
-		stammbaum.getPersonen().add(index, p1);
+		toEdit.setVorname(vor);
+		toEdit.setNachname(nach);
+		toEdit.setGeschlecht(ges);
+		toEdit.setImageSource(file);
+		toEdit.setGeburtsdatum(geburtsdatum);
+		toEdit.setSterbedatum(sterbedatum);
+		centralFrame.editPerson(toEdit);
 	}
 	
 	public void addFields(JPanel layout){
