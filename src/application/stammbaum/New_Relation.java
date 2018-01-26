@@ -24,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class New_Relation extends JOptionPane {
 	private Stammbaum stammbaum;
+	private CentralFrame central;
 	private JList vater;
 	private JList mutter;
 	private JList kinder;
@@ -33,8 +34,9 @@ public class New_Relation extends JOptionPane {
 	
 	private DefaultListModel model;
 	
-	public New_Relation(Stammbaum stammbaum, CentralFrame central) {
-		this.stammbaum = stammbaum;
+	public New_Relation(Mainscreen main) {
+		this.stammbaum = main.stammbaum;
+		this.central = main.central;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/4_new_relation.png", 50);
 		JPanel layout = new JPanel(new GridLayout(1,3));
 		addAllSelections(layout);
@@ -47,7 +49,7 @@ public class New_Relation extends JOptionPane {
 	    				b.KindHinzufuegen(kinder_p.get(i));
 	    			}
 	    			stammbaum.beziehungHinzufuegen(b);
-	    			central.addRelation(b);
+	    			central.refreshAll(main.stammbaum);
 	    		}
 	    }
 	}

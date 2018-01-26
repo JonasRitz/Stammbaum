@@ -14,11 +14,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class Save_onclick implements ActionListener {
-	JFrame parent;
+	Mainscreen parent;
 	Stammbaum stammbaum;
-	public Save_onclick(JFrame parent, Stammbaum stammbaum){
-		this.parent = parent;
-		this.stammbaum = stammbaum;
+	public Save_onclick(Mainscreen main){
+		this.parent = main;
+		this.stammbaum = main.stammbaum;
 	}
 	
 	public void actionPerformed(ActionEvent e){

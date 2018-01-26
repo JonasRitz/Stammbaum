@@ -9,14 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Settings_person_onclick implements ActionListener {
-	Stammbaum stammbaum;
-	CentralFrame frame;
-	public Settings_person_onclick(Stammbaum stammbaum, CentralFrame frame){
-		this.stammbaum = stammbaum;
-		this.frame = frame;
+	Mainscreen main;
+	public Settings_person_onclick(Mainscreen main){
+		this.main = main;
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		Settings_person p = new Settings_person(this.stammbaum, frame);
+		Settings_person p = new Settings_person(this.main);
 	}
 }

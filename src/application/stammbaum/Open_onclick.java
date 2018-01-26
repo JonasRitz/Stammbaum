@@ -29,9 +29,9 @@ import org.json.simple.parser.ParseException;
 public class Open_onclick implements ActionListener {
 	Mainscreen main;
 	Stammbaum stammbaum;
-	public Open_onclick(Mainscreen main, Stammbaum stammbaum){
+	public Open_onclick(Mainscreen main){
 		this.main = main;
-		this.stammbaum = stammbaum;
+		this.stammbaum = main.stammbaum;
 	}
 	
 	public void actionPerformed(ActionEvent e){
@@ -45,14 +45,14 @@ public class Open_onclick implements ActionListener {
 				Object obj = parser.parse(new FileReader(chooser.getSelectedFile().getAbsolutePath()));
 				Stammbaum baum = convert_Json_to_Stammbaum(obj);
 				main.stammbaum = baum;
-				main.central.refreshAll(baum, stammbaum);
+				main.central.refreshAll(baum);
+				//OnClickListener beziehen sich durch die unteren beiden Zeilen nun auf den neuen Stammbaum
 				main.remove_onClickListener();
 				main.initialisiere_onClickListener();
-				
 	        } catch (IOException error) {
 	            error.printStackTrace();
 	        } catch (ParseException errorParse){
-	        		errorParse.printStackTrace();
+	        	errorParse.printStackTrace();
 	        }
 		}
 	}

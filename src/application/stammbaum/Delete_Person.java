@@ -24,14 +24,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Delete_Person extends JOptionPane {
 	private Stammbaum stammbaum;
+	private CentralFrame central;
 	private ArrayList<Person> zwischenspeicher; // enthaelt alle gelöschten Personen um im Falle von Cancel diese wieder dem Stammbaum hinzuzufuegen
 	private JList liste;
 	private DefaultListModel model;
-	private CentralFrame central;
-	
-	public Delete_Person(Stammbaum stammbaum, CentralFrame central) {
-		this.stammbaum = stammbaum;
-		this.central = central;
+
+	public Delete_Person(Mainscreen main) {
+		this.stammbaum = main.stammbaum;
+		this.central = main.central;
 		zwischenspeicher = new ArrayList<Person>();
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/2_delete_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(2,1));
@@ -39,14 +39,14 @@ public class Delete_Person extends JOptionPane {
 		addRemoveButton(layout);
 	    int result = this.showConfirmDialog(null, layout, "Entferne eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result != this.OK_OPTION) {
-	    		addPersonsAgain();
+	    	addPersonsAgain();
 	    }
 	}
 	
 	public void addPersonsAgain(){
 		for(Person p : zwischenspeicher){
 			stammbaum.personHinzufuegen(p);
-			central.addPerson(p);
+			central.refreshAll(stammbaum);
 		}
 	}
 	
@@ -56,11 +56,10 @@ public class Delete_Person extends JOptionPane {
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();
-				zwischenspeicher.add(stammbaum.getPersonen().get(index));
-				central.removePerson(stammbaum.getPersonen().get(index));
 				model.remove(index);
-				stammbaum.personLoeschen(index);
+				zwischenspeicher.add(stammbaum.getPersonen().get(index));
 				stammbaum.personEntfernen(stammbaum.getPersonen().get(index));
+				central.refreshAll(stammbaum);
 			}
 		});
 	}

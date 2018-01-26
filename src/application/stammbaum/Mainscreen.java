@@ -54,12 +54,12 @@ public class Mainscreen extends JFrame {
 	}
 	
 	public void initialisiere_onClickListener(){
-		vertical.get(NEW_PERSON).addActionListener(new New_person_onclick(this.stammbaum, this.central));
-		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this.stammbaum, this.central));
-		vertical.get(SETTINGS_PERSON).addActionListener(new Settings_person_onclick(this.stammbaum, this.central));
-		vertical.get(NEW_RELATION).addActionListener(new New_relation_onclick(this.stammbaum, this.central));
-		horizontal.get(SAVE).addActionListener(new Save_onclick(this, this.stammbaum));
-		horizontal.get(OPEN).addActionListener(new Open_onclick(this, this.stammbaum));
+		vertical.get(NEW_PERSON).addActionListener(new New_person_onclick(this));
+		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this));
+		vertical.get(SETTINGS_PERSON).addActionListener(new Settings_person_onclick(this));
+		vertical.get(NEW_RELATION).addActionListener(new New_relation_onclick(this));
+		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
+		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
 	}
 
 	public void initialisiere_alles() {

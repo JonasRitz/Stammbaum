@@ -1,3 +1,10 @@
+/*
+ * Idee: Update Gui fur jede Klasse, z.B. in edit Person ruft update GUI auf central Frame edit Person auf
+ * 
+ * 
+ * 
+ */
+
 package application.stammbaum;
 import java.util.*;
 public class Beziehung{

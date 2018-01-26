@@ -40,9 +40,9 @@ public class New_Person extends JOptionPane {
 	private JComboBox<Integer> yearDied;
 	
 	
-	public New_Person(Stammbaum stammbaum, CentralFrame central) {
-		this.stammbaum = stammbaum;
-		this.central = central;
+	public New_Person(Mainscreen main) {
+		this.stammbaum = main.stammbaum;
+		this.central = main.central;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/1_new_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(6,2));
 		addFields(layout);
@@ -76,7 +76,7 @@ public class New_Person extends JOptionPane {
 		}
 		Person p1 = new Person(vor, nach, ges, file, geburtsdatum, sterbedatum);
 		stammbaum.personHinzufuegen(p1);
-		central.addPerson(p1);
+		central.refreshAll(stammbaum);
 	}
 	
 	public void addFields(JPanel layout){

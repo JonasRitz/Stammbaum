@@ -12,15 +12,12 @@ import javax.swing.border.*;
 import java.awt.event.ActionEvent;
 
 public class Delete_person_onclick implements ActionListener{
-	Stammbaum stammbaum;
-	CentralFrame central;
-	
-	public Delete_person_onclick(Stammbaum stammbaum, CentralFrame central){
-		this.stammbaum = stammbaum;
-		this.central = central;
+	Mainscreen main;
+	public Delete_person_onclick(Mainscreen main){
+		this.main = main;
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		Delete_Person p = new Delete_Person(this.stammbaum, this.central);
+		Delete_Person p = new Delete_Person(this.main);
 	}
 }

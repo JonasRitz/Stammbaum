@@ -14,7 +14,18 @@ public class Stammbaum{
 		System.out.println("Es wurde dem Stammbaum eine Person hinzugefuegt.");
 	}
 	
+	public boolean istInBeziehung(Person p){
+		for(Beziehung b : beziehungen){
+			if(b.getVater() == p || b.getMutter() == p || b.getKinder().contains(p)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void personEntfernen(Person p){
+		personen.remove(p);
+		
 		for(Beziehung b : beziehungen){
 			if(b.getVater() == p || b.getMutter() == p){
 				beziehungen.remove(b);
@@ -38,10 +49,6 @@ public class Stammbaum{
 		}
 		beziehungen.add(neu);
 		System.out.println("Es wurde dem Stammbaum eine Beziehung hinzugefuegt.");
-	}
-	
-	public void personLoeschen(int index){
-		personen.remove(index);
 	}
 	
 	public ArrayList<Person> getPersonen(){

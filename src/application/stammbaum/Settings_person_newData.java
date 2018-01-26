@@ -41,10 +41,10 @@ public class Settings_person_newData extends JOptionPane {
 	private JComboBox<Integer> yearDied;
 	private CentralFrame centralFrame;
 	
-	public Settings_person_newData(Stammbaum stammbaum, Person toEdit, CentralFrame frame) {
-		this.stammbaum = stammbaum;
+	public Settings_person_newData(Mainscreen main, Person toEdit) {
+		this.stammbaum = main.stammbaum;
 		this.toEdit = toEdit;
-		this.centralFrame = frame;
+		this.centralFrame = main.central;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(6,2));
 		addFields(layout);
@@ -85,7 +85,8 @@ public class Settings_person_newData extends JOptionPane {
 		toEdit.setImageSource(file);
 		toEdit.setGeburtsdatum(geburtsdatum);
 		toEdit.setSterbedatum(sterbedatum);
-		centralFrame.editPerson(toEdit);
+		
+		centralFrame.refreshAll(stammbaum);
 	}
 	
 	public void addFields(JPanel layout){

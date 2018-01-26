@@ -12,13 +12,11 @@ import javax.swing.border.*;
 import java.awt.event.ActionEvent;
 
 public class New_person_onclick implements ActionListener{
-	Stammbaum stammbaum;
-	CentralFrame central;
-	public New_person_onclick(Stammbaum stammbaum, CentralFrame central){
-		this.stammbaum = stammbaum;
-		this.central  = central;
+	Mainscreen main;
+	public New_person_onclick(Mainscreen main){
+		this.main = main;
 	}
 	public void actionPerformed(ActionEvent e){
-		New_Person p = new New_Person(this.stammbaum, this.central);
+		New_Person p = new New_Person(this.main);
 	}
 }

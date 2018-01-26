@@ -14,15 +14,12 @@ import javax.swing.border.*;
 import java.awt.event.ActionEvent;
 
 public class New_relation_onclick implements ActionListener{
-	Stammbaum stammbaum;
-	CentralFrame central;
-	
-	public New_relation_onclick(Stammbaum stammbaum, CentralFrame central){
-		this.stammbaum = stammbaum;
-		this.central = central;
+	Mainscreen main;
+	public New_relation_onclick(Mainscreen main){
+		this.main = main;
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		New_Relation p = new New_Relation(this.stammbaum, this.central);
+		New_Relation p = new New_Relation(this.main);
 	}
 }

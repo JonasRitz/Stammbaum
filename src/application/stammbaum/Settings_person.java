@@ -24,19 +24,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Settings_person extends JOptionPane {
 	public Stammbaum stammbaum;
+	private Mainscreen main;
 	private JList liste;
 	private DefaultListModel model;
 	private CentralFrame frame;
-	public Settings_person(Stammbaum stammbaum, CentralFrame frame) {
-		this.stammbaum = stammbaum;
-		this.frame = frame;
+	public Settings_person(Mainscreen main) {
+		this.stammbaum = main.stammbaum;
+		this.main = main;
+		this.frame = main.central;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
 		JPanel layout = new JPanel(new GridLayout(2,1));
 		addSelectionList(layout);
 		addSettingsButton(layout);
 	    int result = this.showConfirmDialog(null, layout, "Bearbeite eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result == this.OK_OPTION && liste.getSelectedIndex() != -1) {
-	    		Settings_person_newData nD = new Settings_person_newData(stammbaum, stammbaum.getPersonen().get(liste.getSelectedIndex()), frame);
+	    		Settings_person_newData nD = new Settings_person_newData(this.main, stammbaum.getPersonen().get(liste.getSelectedIndex()));
 	    }
 	}
 	
@@ -46,7 +48,7 @@ public class Settings_person extends JOptionPane {
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();
-				Settings_person_newData nD = new Settings_person_newData(stammbaum, stammbaum.getPersonen().get(liste.getSelectedIndex()), frame);
+				Settings_person_newData nD = new Settings_person_newData(main, stammbaum.getPersonen().get(liste.getSelectedIndex()));
 			}
 		});
 	}
