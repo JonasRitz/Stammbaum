@@ -43,6 +43,8 @@ public class CentralFrame extends JPanel {
 	}
 	
 	protected void refreshAll(Stammbaum baum){
+		this.removeAll();
+		int personenOhneBeziehung = 0;
 		for(Person p : parent.stammbaum.getPersonen()){
 			if(baum.istInBeziehung(p)){
 				System.out.println("Person mit Beziehung wird optisch hinzugefuegt.");
@@ -52,9 +54,10 @@ public class CentralFrame extends JPanel {
 				Insets insets = this.getInsets();	
 				Dimension size = personLabel.getPreferredSize();
 				Dimension sizeOfJPanel = this.getSize();
-				personLabel.setBounds(sizeOfJPanel.width/2 - size.width/2 + insets.left, 25 + insets.top, size.width, size.height);
+				personLabel.setBounds(sizeOfJPanel.width-size.width-25 + insets.left, 25 + insets.top + personenOhneBeziehung*(size.height+25), size.width, size.height);
 				this.add(personLabel);
 				personLabel.repaint();
+				personenOhneBeziehung++;
 			}
 		}
 		this.setVisible(true);
