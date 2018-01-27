@@ -34,7 +34,6 @@ public class CentralFrame extends JPanel {
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
-	private Stammbaum baum;
 	private ArrayList<Person[]> hierarchie; //erstes Elem = unterstes
 
 	public CentralFrame(Mainscreen parent, Stammbaum baum){
@@ -43,18 +42,39 @@ public class CentralFrame extends JPanel {
 		this.parent = parent;
 		this.persons = new HashMap<>();
 		this.hierarchie = new ArrayList<>();
-		this.baum = baum;
 		this.setVisible(true);
 	}
 
 	protected void refreshAll(Stammbaum baum){
 		this.removeAll();
+		boolean hatMehrPlatz = personenOhneBeziehungHinzufuegen(baum);
+		personenMitBeziehungHinzufuegen(baum, hatMehrPlatz);
+		this.setVisible(true);
+		this.parent.repaint();
+		this.parent.setVisible(true);
+	}
+	
+	public void personenMitBeziehungHinzufuegen(Stammbaum baum, boolean hatMehrPlatz){
+		if (baum.beziehungen.size() > 0) {
+			calculateHead(baum);
+		}
+		this.setVisible(true);
+		this.parent.repaint();
+		this.parent.setVisible(true);
+	}
+	
+	
+	public boolean personenOhneBeziehungHinzufuegen(Stammbaum baum){
+		//iteriert ueber die Personen in einem Stammbaum und fuegt die Person, die nicht Teil 
+		//einer Beziehung sind dem Stammbaum auf der Rechten Seite als Art Liste hinzu liefert 
+		//true wenn eine Hinzugefuegt wurde, ansonsten false, damit man in dem Fall, dass man 
+		//keine Person in einer Beziehung hat mehr Platz benutzen kann
 		int personenOhneBeziehung = 0;
+		boolean hatMehrPlatz = true;
 		for(Person p : parent.stammbaum.getPersonen()){
-			if(baum.istInBeziehung(p)){
-				System.out.println("Person mit Beziehung wird optisch hinzugefuegt.");
-			}else{
-				System.out.println("Person wird optisch hinzugefuegt: " + p.toString());
+			if(!baum.istInBeziehung(p)){
+				hatMehrPlatz = false;
+				System.out.println("Person ohne Beziehung wird optisch hinzugefuegt: " + p.toString());
 				JLabel personLabel = createJLabelOfPerson(p);
 				Insets insets = this.getInsets();	
 				Dimension size = personLabel.getPreferredSize();
@@ -65,23 +85,18 @@ public class CentralFrame extends JPanel {
 				personenOhneBeziehung++;
 			}
 		}
-		if (this.baum.beziehungen.size() > 0) {
-			calculateHead();
-		}
-		this.setVisible(true);
-		this.parent.repaint();
-		this.parent.setVisible(true);
+		return hatMehrPlatz;
 	}
 
-	protected void calculateHead() {
+	protected void calculateHead(Stammbaum baum) {
 
 		ArrayList<Person[]> heads = new ArrayList<>();
-		Person head_v = this.baum.beziehungen.get(0).vater;
-		Person head_m = this.baum.beziehungen.get(0).mutter;
+		Person head_v = baum.beziehungen.get(0).vater;
+		Person head_m = baum.beziehungen.get(0).mutter;
 		Person[] head = {head_v, head_m};
 		heads.add(head);
 		
-		for (Beziehung b: this.baum.beziehungen) {
+		for (Beziehung b: baum.beziehungen) {
 			for (Person p : b.kinder) {
 				boolean found = false;
 				for (Person[] paar: heads) {
@@ -102,27 +117,8 @@ public class CentralFrame extends JPanel {
 			}
 		}
 	}
-
-
-	/*protected void calculateHead() {
-
-		Person head_v = this.baum.beziehungen.get(0).vater;
-		Person head_m = this.baum.beziehungen.get(0).mutter;
-		for (Beziehung b: this.baum.beziehungen) {
-			for (Person p : b.kinder) {
-				if(p == head_v || p == head_m) {
-					head_v = b.vater;
-					head_m = b.mutter;
-				}
-			}
-		}
-		System.out.println(head_v + " " + head_m);
-	}*/
-
+	
 	protected Insets calculateInsets(Insets old){
-
-
-
 		return null;
 	}
 
