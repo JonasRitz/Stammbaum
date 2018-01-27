@@ -99,13 +99,11 @@ public class CentralFrame extends JPanel {
 	}
 
 	protected ArrayList<Person[]> calculateHead(Stammbaum baum) {
-
 		ArrayList<Person[]> heads = new ArrayList<>();
 		Person head_v = baum.beziehungen.get(0).vater;
 		Person head_m = baum.beziehungen.get(0).mutter;
 		Person[] head = {head_v, head_m};
 		heads.add(head);
-		
 		for (Beziehung b: baum.beziehungen) {
 			for (Person p : b.kinder) {
 				boolean found = false;
