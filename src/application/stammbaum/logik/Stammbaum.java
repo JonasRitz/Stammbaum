@@ -25,7 +25,6 @@ public class Stammbaum{
 	
 	public void personEntfernen(Person p){
 		personen.remove(p);
-		
 		for(Beziehung b : beziehungen){
 			if(b.getVater() == p || b.getMutter() == p){
 				beziehungen.remove(b);
