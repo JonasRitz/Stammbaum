@@ -47,6 +47,7 @@ public class Delete_Person extends JOptionPane {
 		for(Person p : zwischenspeicher){
 			stammbaum.personHinzufuegen(p);
 			central.refreshAll(stammbaum);
+			//TODO: Gucken, dass nicht nur die Person sondern auch seine Beziehung wieder kommt
 		}
 	}
 	

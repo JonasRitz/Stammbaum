@@ -15,6 +15,6 @@ public class Settings_relation_onclick implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		Settings_person p = new Settings_person(this.main);
+		Settings_relation p = new Settings_relation(this.main);
 	}
 }

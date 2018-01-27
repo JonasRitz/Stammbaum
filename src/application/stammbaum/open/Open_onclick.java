@@ -94,9 +94,8 @@ public class Open_onclick implements ActionListener {
 			Person mutter = stammbaum.getPersonen().get(mutter_id);
 			Beziehung b1 = new Beziehung(vater, mutter);
 			JSONArray kinder = (JSONArray) bez.get("kinder");
-			
 			for(int j=0; j<kinder.size(); j++){
-				int kind_id = ((Long) kinder.get(i)).intValue();
+				int kind_id = ((Long) kinder.get(j)).intValue();
 				b1.KindHinzufuegen(stammbaum.getPersonen().get(kind_id));
 			}
 			stammbaum.beziehungHinzufuegen(b1);

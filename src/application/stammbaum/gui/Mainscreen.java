@@ -50,9 +50,11 @@ public class Mainscreen extends JFrame {
 		vertical.get(SETTINGS_PERSON).removeActionListener(vertical.get(SETTINGS_PERSON).getActionListeners()[0]);
 		vertical.get(NEW_RELATION).removeActionListener(vertical.get(NEW_RELATION).getActionListeners()[0]);
 		vertical.get(DELETE_RELATION).removeActionListener(vertical.get(DELETE_RELATION).getActionListeners()[0]);
+		vertical.get(SETTINGS_RELATION).removeActionListener(vertical.get(SETTINGS_RELATION).getActionListeners()[0]);
 		
 		horizontal.get(SAVE).removeActionListener(horizontal.get(SAVE).getActionListeners()[0]);
 		horizontal.get(OPEN).removeActionListener(horizontal.get(OPEN).getActionListeners()[0]);
+		horizontal.get(PRINT).removeActionListener(horizontal.get(PRINT).getActionListeners()[0]);
 	}
 	
 	public void initialisiere_onClickListener(){
@@ -61,9 +63,11 @@ public class Mainscreen extends JFrame {
 		vertical.get(SETTINGS_PERSON).addActionListener(new Settings_person_onclick(this));
 		vertical.get(NEW_RELATION).addActionListener(new New_relation_onclick(this));
 		vertical.get(DELETE_RELATION).addActionListener(new Delete_relation_onclick(this));
+		vertical.get(SETTINGS_RELATION).addActionListener(new Settings_relation_onclick(this));
 		
 		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
 		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
+		horizontal.get(PRINT).addActionListener(new Print_onclick(this));
 	}
 
 	public void initialisiere_alles() {

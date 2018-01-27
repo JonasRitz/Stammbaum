@@ -9,6 +9,47 @@ public class Stammbaum{
 		beziehungen = new ArrayList<>();
 	}
 	
+	public ArrayList<Person[]> getHead(){
+		ArrayList<Person[]> liste = new ArrayList<>();
+		for(Beziehung b : beziehungen){
+			if(gibEltern(b.getVater()) == null && gibEltern(b.getMutter()) == null){
+				Person eltern[] = {b.getVater(), b.getMutter()};
+				liste.add(eltern);
+			}
+		}
+		return liste;
+	}
+	
+	public Person[] gibEltern(Person p){
+		for(Beziehung b: beziehungen){
+			if(b.getKinder().contains(p)){
+				Person eltern[] = {b.getVater(), b.getMutter()};
+				return eltern;
+			}
+		}
+		return null;
+	}
+	
+	public ArrayList<Person> getKinderZuEltern(Person[] p){
+		for(Beziehung b : beziehungen){
+			if(b.getVater() == p[0] && b.getMutter() == p[1] || b.getVater() == p[1] && b.getMutter() == p[0]){
+				return b.getKinder();
+			}
+		}
+		return null;
+	}
+	
+	public Person getBeziehungsPartner(Person p){
+		for(Beziehung b : beziehungen){
+			if(b.getVater() == p){
+				return b.getMutter();
+			}else if(b.getMutter() == p){
+				return b.getVater();
+			}
+		}
+		return null;
+	}
+	
 	public void personHinzufuegen(Person p){
 		personen.add(p);
 		System.out.println("Es wurde dem Stammbaum eine Person hinzugefuegt.");
@@ -25,12 +66,11 @@ public class Stammbaum{
 	
 	public void personEntfernen(Person p){
 		personen.remove(p);
-		for(Beziehung b : beziehungen){
-			if(b.getVater() == p || b.getMutter() == p){
-				beziehungen.remove(b);
-			}
-			if(b.getKinder().indexOf(p) != -1){
-				b.getKinder().remove(p);
+		for(int i=0; i<beziehungen.size(); i++){
+			if(beziehungen.get(i).getVater() == p || beziehungen.get(i).getMutter() == p){
+				beziehungen.remove(beziehungen.get(i));
+			}else if(beziehungen.get(i).getKinder().indexOf(p) != -1){
+				beziehungen.get(i).getKinder().remove(p);
 			}
 		}
 		
@@ -39,7 +79,6 @@ public class Stammbaum{
 	public void beziehungHinzufuegen(Beziehung neu){
 		for(Beziehung old : beziehungen){
 			if(old.getVater() == neu.getVater() && old.getMutter() == neu.getMutter()){
-				System.out.println("Es wurde im Stammbaum eine Beziehung ueberarbeitet.");
 				for(Person kind : neu.getKinder()){
 					old.KindHinzufuegen(kind);
 				}
@@ -47,7 +86,6 @@ public class Stammbaum{
 			}
 		}
 		beziehungen.add(neu);
-		System.out.println("Es wurde dem Stammbaum eine Beziehung hinzugefuegt.");
 	}
 	
 	public void beziehungEntfernen(Beziehung bez1){

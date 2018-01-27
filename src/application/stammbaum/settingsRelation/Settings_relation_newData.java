@@ -5,11 +5,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import javafx.application.Application;
-import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.*;
@@ -24,199 +24,90 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Settings_relation_newData extends JOptionPane {
 	private Stammbaum stammbaum;
-	private Person toEdit;
-	protected CentralFrame central;
-	private JTextField vorname;
-	private JTextField nachname;
-	private JComboBox<String> geschlecht;
-	private JButton openButton;
-	private JButton birth;
-	private JFileChooser choose;
-	private int resultOfFileSelection = JFileChooser.CANCEL_OPTION;
-	private JComboBox<Integer> day;
-	private JComboBox<Integer> month;
-	private JComboBox<Integer> year;
-	private JComboBox<Integer> dayDied;
-	private JComboBox<Integer> monthDied;
-	private JComboBox<Integer> yearDied;
-	private CentralFrame centralFrame;
+	private CentralFrame central;
+	private JList vater;
+	private JList mutter;
+	private JList kinder;
+	private Beziehung toEdit;
 	
-	public Settings_relation_newData(Mainscreen main, Person toEdit) {
+	private ArrayList<Person> väter_p = new ArrayList<Person>();
+	private ArrayList<Person> mütter_p = new ArrayList<Person>();
+	private ArrayList<Person> kinder_p = new ArrayList<Person>();
+	
+	private DefaultListModel model;
+	
+	public Settings_relation_newData(Mainscreen main, Beziehung b) {
 		this.stammbaum = main.stammbaum;
-		this.toEdit = toEdit;
-		this.centralFrame = main.central;
-		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
-		JPanel layout = new JPanel(new GridLayout(6,2));
-		addFields(layout);
-	    int result = this.showConfirmDialog(null, layout, "Ausgewaehlte Person bearbeiten: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
+		this.central = main.central;
+		this.toEdit = b;
+		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/6_settings_relation.png", 50);
+		JPanel layout = new JPanel(new GridLayout(1,3));
+		personenListenErstellen();
+		addAllSelections(layout);
+	    int result = this.showConfirmDialog(null, layout, "Bearbeite diese Beziehung: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result == this.OK_OPTION) {
-	    		if(!vorname.getText().equals("") && vorname.getText()!=null && !nachname.getText().equals("") && nachname.getText()!=null){
-	    			getDataInserted();
-	    		}else{
-	    			JOptionPane.showMessageDialog(this, "Person konnte aufgrund unzureichender Informationen nicht geändert werden.", "", JOptionPane.ERROR_MESSAGE);
+	    		if(vater.getSelectedIndex() != -1 && mutter.getSelectedIndex() != -1 && kinder.getSelectedIndices().length != 0){
+	    			stammbaum.getBeziehungen().remove(toEdit);
+	    			Beziehung neu = new Beziehung(väter_p.get(vater.getSelectedIndex()),  mütter_p.get(mutter.getSelectedIndex()));
+	    			for(int i : kinder.getSelectedIndices()){
+	    				neu.KindHinzufuegen(kinder_p.get(i));
+	    			}
+	    			stammbaum.beziehungHinzufuegen(neu);
+	    			central.refreshAll(main.stammbaum);
 	    		}
 	    }
 	}
 	
-	public void getDataInserted(){ //Werte die optional sind, werden, wenn sie nicht angegeben werden als null realisiert
-		String vor = vorname.getText();
-		String nach = nachname.getText();
-		String ges = (String)geschlecht.getSelectedItem();
+	public void addAllSelections(JPanel layout){
+		vater = addSelectionList(layout, "Vater");
+		vater.setSelectedIndex(väter_p.indexOf(toEdit.getVater()));
 		
-		String file = null;
-		if(resultOfFileSelection == JFileChooser.APPROVE_OPTION){
-			file = choose.getSelectedFile().getAbsolutePath();
-		}else{
-			file = toEdit.getImageSource();
-		}
+		mutter = addSelectionList(layout, "Mutter");
+		mutter.setSelectedIndex(mütter_p.indexOf(toEdit.getMutter()));
 		
-		LocalDate geburtsdatum = null;
-		if(year.getSelectedItem()!=null && month.getSelectedItem()!=null && day.getSelectedItem()!=null){
-			geburtsdatum = LocalDate.of((int)year.getSelectedItem(), (int)month.getSelectedItem(), (int)day.getSelectedItem());
-		}
-		
-		LocalDate sterbedatum = null;
-		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
-			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)monthDied.getSelectedItem(), (int)dayDied.getSelectedItem());
-		}
-		toEdit.setVorname(vor);
-		toEdit.setNachname(nach);
-		toEdit.setGeschlecht(ges);
-		toEdit.setImageSource(file);
-		toEdit.setGeburtsdatum(geburtsdatum);
-		toEdit.setSterbedatum(sterbedatum);
-		
-		centralFrame.refreshAll(stammbaum);
+		kinder = addSelectionList(layout, "Kinder");
 	}
 	
-	public void addFields(JPanel layout){
-		addNachnameField(layout);
-		addVornameField(layout);
-		addGeschlechterAuswahl(layout);
-		addBilderAuswahl(layout);
-	    addGeburtsDatumAuswahl(layout);
-	    addSterbeDatumAuswahl(layout);
-	}
-	
-	public void addNachnameField(JPanel layout){
-		nachname = new JTextField(5);
-		nachname.setText(toEdit.getNachname());
-		layout.add(new JLabel("Nachname:"));
-	    layout.add(nachname);
-	}
-
-	public void addVornameField(JPanel layout){
-		vorname = new JTextField(5); 
-		vorname.setText(toEdit.getVorname());
-		layout.add(new JLabel("Vorname:"));
-		layout.add(vorname);
-	}
-	
-	public void addGeschlechterAuswahl(JPanel layout){
-		String geschlechter[] = {"weiblich", "männlich", "X"};
-		geschlecht = new JComboBox<>(geschlechter);
-		geschlecht.setSelectedItem(toEdit.getGeschlecht());
-	    layout.add(new JLabel("Geschlecht:"));
-	    layout.add(geschlecht);
-	}
-	
-	public void addBilderAuswahl(JPanel layout){
-		layout.add(new JLabel("Bild: "));
-	    openButton = new JButton("Bild auswählen");
-	    openButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				choose = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Bildateien (*.jpg, *.png) ", "jpg", "png");
-				choose.setFileFilter(filter);
-				resultOfFileSelection = choose.showOpenDialog(layout);
+	public JList addSelectionList(JPanel layout, String who){
+		ArrayList<Person> pers_arr_list = stammbaum.getPersonen();
+		model = new DefaultListModel();
+		for(Person pers : pers_arr_list){
+			if(!who.equals("Kinder")){
+				if(pers.getGeschlecht().equals(geschlecht(who))){
+					model.addElement(pers.toString());
+				}
+			}else{
+				model.addElement(pers.toString());
 			}
-		});
-	    layout.add(openButton);
+		}
+		JList liste = new JList(model);
+		if(who.equals("Kinder")){
+			liste.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		}
+		Border niceBorder = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),BorderFactory.createLoweredBevelBorder());
+		Border compound = BorderFactory.createTitledBorder(niceBorder, who + " auswählen");
+		liste.setBorder(compound);
+		layout.add(liste);
+		return liste;
 	}
 	
-	public void addGeburtsDatumAuswahl(JPanel layout){
-		layout.add(new JLabel("Geburtsdatum: "));
-		Box birthdate = Box.createHorizontalBox();
-		
-		day = new JComboBox<Integer>();
-		for(int i=1; i<=31; i++){
-			day.insertItemAt(i, i-1);
+	public void personenListenErstellen(){
+		for(Person p: stammbaum.getPersonen()){
+			if(p.getGeschlecht().equals("männlich")){
+				väter_p.add(p);
+			}else if(p.getGeschlecht().equals("weiblich")){
+				mütter_p.add(p);
+			}
+			kinder_p.add(p);
 		}
-		birthdate.add(day);
-		
-		month = new JComboBox<Integer>();
-		for(int i=1; i<=12; i++){
-			month.insertItemAt(i, i-1);
-		}
-		birthdate.add(month);
-		
-		
-		int aktuellesJahr = Calendar.getInstance().get(Calendar.YEAR);
-		year = new JComboBox<Integer>();
-		for(int i=aktuellesJahr; i>=0; i--){
-			year.insertItemAt(i, aktuellesJahr-i);
-		}
-		
-		if(toEdit.getGeburtsdatum() == null){
-			day.setSelectedIndex(-1);
-			month.setSelectedIndex(-1);
-			year.setSelectedIndex(-1);
+	}
+	
+	public String geschlecht(String who){
+		if(who.equals("Vater")){
+			return "männlich";
 		}else{
-			day.setSelectedIndex(toEdit.getGeburtsdatum().getDayOfMonth()-1);
-			month.setSelectedIndex(toEdit.getGeburtsdatum().getMonthValue()-1);
-			year.setSelectedIndex(aktuellesJahr - toEdit.getGeburtsdatum().getYear());
+			return "weiblich";
 		}
-		
-		birthdate.add(year);
-
-		layout.add(birthdate);
-	    
 	}
-	
-	public void addSterbeDatumAuswahl(JPanel layout){
-		layout.add(new JLabel("Sterbedatum: "));
 
-		Box deathdate = Box.createHorizontalBox();
-		dayDied = new JComboBox<Integer>();
-		for(int i=1; i<=31; i++){
-			dayDied.insertItemAt(i, i-1);
-		}
-		deathdate.add(dayDied);
-		
-		monthDied = new JComboBox<Integer>();
-		for(int i=1; i<=12; i++){
-			monthDied.insertItemAt(i, i-1);
-		}
-		deathdate.add(monthDied);
-		
-		int aktuellesJahr = Calendar.getInstance().get(Calendar.YEAR);
-		yearDied = new JComboBox<Integer>();
-		for(int i=aktuellesJahr; i>=0; i--){
-			yearDied.insertItemAt(i, aktuellesJahr-i);
-		}
-
-		
-		if(toEdit.getSterbedatum() == null){
-			dayDied.setSelectedIndex(-1);
-			monthDied.setSelectedIndex(-1);
-			yearDied.setSelectedIndex(-1);
-		}else{
-			dayDied.setSelectedIndex(toEdit.getSterbedatum().getDayOfMonth()-1);
-			monthDied.setSelectedIndex(toEdit.getSterbedatum().getMonthValue()-1);
-			yearDied.setSelectedIndex(aktuellesJahr - toEdit.getSterbedatum().getYear());
-		}
-		
-		deathdate.add(yearDied);
-		layout.add(deathdate);
-	    
-	}
-	
-	public ImageIcon resizeImage(String name, int size){
-		ImageIcon imageIcon = new ImageIcon(name);
-		Image image = imageIcon.getImage();
-		Image newimg = image.getScaledInstance(size, size,  java.awt.Image.SCALE_SMOOTH); 
-		imageIcon = new ImageIcon(newimg); 
-		return imageIcon; // diese und zwei Zeilen darüber: Skalieren das Bild auf gewünschte Pixelgröße
-	}
-	
 }

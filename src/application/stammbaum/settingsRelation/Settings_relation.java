@@ -23,47 +23,57 @@ import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Settings_relation extends JOptionPane {
-	public Stammbaum stammbaum;
+	private Stammbaum stammbaum;
 	private Mainscreen main;
+	private CentralFrame central;
 	private JList liste;
 	private DefaultListModel model;
-	private CentralFrame frame;
+
 	public Settings_relation(Mainscreen main) {
 		this.stammbaum = main.stammbaum;
+		this.central = main.central;
 		this.main = main;
-		this.frame = main.central;
-		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
+		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/6_settings_relation.png", 50);
 		JPanel layout = new JPanel();
 		addSelectionList(layout);
 		addSettingsButton(layout);
-	    int result = this.showConfirmDialog(null, layout, "Bearbeite eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
-	    if (result == this.OK_OPTION && liste.getSelectedIndex() != -1) {
-	    		Settings_person_newData nD = new Settings_person_newData(this.main, stammbaum.getPersonen().get(liste.getSelectedIndex()));
+	    int result = this.showConfirmDialog(null, layout, "Bearbeite eine Beziehung: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
+	    if (result == this.OK_OPTION) {
+	    	Settings_relation_newData nD = new Settings_relation_newData(main, stammbaum.getBeziehungen().get(liste.getSelectedIndex()));
 	    }
 	}
 	
 	public void addSettingsButton(JPanel layout){
-		JButton b = new JButton("Person bearbeiten");
+		JButton b = new JButton("Beziehung bearbeiten");
 		layout.add(b);
 		Dimension d = new Dimension(150, 30);
 		b.setSize(d);
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();
-				Settings_person_newData nD = new Settings_person_newData(main, stammbaum.getPersonen().get(liste.getSelectedIndex()));
+				Settings_relation_newData nD = new Settings_relation_newData(main, stammbaum.getBeziehungen().get(liste.getSelectedIndex()));
 			}
 		});
 	}
 	
 	public void addSelectionList(JPanel layout){
-		ArrayList<Person> pers_arr_list = stammbaum.getPersonen();
+		ArrayList<Beziehung> bez_arr_list = stammbaum.getBeziehungen();
 		model = new DefaultListModel();
-		for(Person pers : pers_arr_list){
-			model.addElement(pers.toString());
+		for(Beziehung bez : bez_arr_list){
+			StringBuilder b1 = new StringBuilder("Vater: ");
+			b1.append(bez.getVater()).append(", Mutter: ").append(bez.getMutter()).append(", Kinder: ");
+			for(Person p : bez.getKinder()){
+				if(bez.getKinder().indexOf(p) == bez.getKinder().size()-1){
+					b1.append(p.toString());
+				}else{
+					b1.append(p.toString()).append(", ");
+				}
+			}
+			model.addElement(b1.toString());
 		}
 		liste = new JList(model);
 		Border niceBorder = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),BorderFactory.createLoweredBevelBorder());
-		Border compound = BorderFactory.createTitledBorder(niceBorder, "Person auswählen");
+		Border compound = BorderFactory.createTitledBorder(niceBorder, "Beziehung auswählen");
 		liste.setBorder(compound);
 		layout.add(liste);
 	}

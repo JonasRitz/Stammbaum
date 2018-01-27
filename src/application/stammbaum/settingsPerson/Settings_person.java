@@ -38,7 +38,7 @@ public class Settings_person extends JOptionPane {
 		addSettingsButton(layout);
 	    int result = this.showConfirmDialog(null, layout, "Bearbeite eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result == this.OK_OPTION && liste.getSelectedIndex() != -1) {
-	    		Settings_person_newData nD = new Settings_person_newData(this.main, stammbaum.getPersonen().get(liste.getSelectedIndex()));
+	    	Settings_person_newData nD = new Settings_person_newData(this.main, stammbaum.getPersonen().get(liste.getSelectedIndex()));
 	    }
 	}
 	

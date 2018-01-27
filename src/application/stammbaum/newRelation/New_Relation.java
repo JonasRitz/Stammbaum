@@ -43,7 +43,7 @@ public class New_Relation extends JOptionPane {
 		personenListenErstellen();
 	    int result = this.showConfirmDialog(null, layout, "Füge eine Beziehung hinzu: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result == this.OK_OPTION) {
-	    		if(vater.getSelectedIndex() != -1 && mutter.getSelectedIndex() != -1 && kinder.getSelectedIndices().length != 0){
+	    		if(vater.getSelectedIndex() != -1 && mutter.getSelectedIndex() != -1){
 	    			Beziehung b = new Beziehung(väter_p.get(vater.getSelectedIndex()), mütter_p.get(mutter.getSelectedIndex()));
 	    			for(int i : kinder.getSelectedIndices()){
 	    				b.KindHinzufuegen(kinder_p.get(i));

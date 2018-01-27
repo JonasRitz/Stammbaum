@@ -21,16 +21,23 @@ package application.stammbaum;
 //this.add(box2);
 import java.awt.Insets;
 import java.awt.*;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 import java.awt.event.*;
 import java.util.*;
-
+import java.awt.Image.*;
 import javax.swing.*;
-
+import java.awt.image.BufferedImage;
 import java.time.format.DateTimeFormatter;
-
+import java.awt.*;
 import javax.swing.border.LineBorder;
+import java.awt.print.*;
+import java.io.File;
+import java.awt.image.AffineTransformOp;
+import java.awt.geom.AffineTransform;
 
-public class CentralFrame extends JPanel {
+public class CentralFrame extends JPanel implements Printable {
+	private Dimension jlabelsize = new Dimension(130,70);
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
@@ -56,11 +63,97 @@ public class CentralFrame extends JPanel {
 	
 	public void personenMitBeziehungHinzufuegen(Stammbaum baum, boolean hatMehrPlatz){
 		if (baum.beziehungen.size() > 0) {
-			calculateHead(baum);
+			//ArrayList<Person[]> ersteZeile = calculateHead(baum);
+			ArrayList<Person[]> ersteZeile = baum.getHead();
+			zeigeErsteZeile(ersteZeile);
+			zeigeNaechsteZeile(baum, ersteZeile, 1); //Start der Rekursion
 		}
 		this.setVisible(true);
 		this.parent.repaint();
 		this.parent.setVisible(true);
+	}
+
+	public void zeigeErsteZeile(ArrayList<Person[]> ersteZeile){
+		Dimension sizeOfJPanel = this.getSize();
+		Insets insets = this.getInsets();
+		int breite = sizeOfJPanel.width-jlabelsize.width-15*2; //abstand 15 nach links und 15 nach rechts von Personen ohne Beziehungen 
+		int distanz_zwischen_paaren = (breite - jlabelsize.width*2*ersteZeile.size()) / (ersteZeile.size()+1);
+		for(int i=0; i<ersteZeile.size(); i++){
+			JLabel vater = createJLabelOfPerson(ersteZeile.get(i)[0]);
+			JLabel mutter = createJLabelOfPerson(ersteZeile.get(i)[1]);
+			vater.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i, insets.top + 15, jlabelsize.width, jlabelsize.height);
+			mutter.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + jlabelsize.width, insets.top + 15, jlabelsize.width, jlabelsize.height);
+			this.add(vater);
+			this.add(mutter);
+			vater.repaint();
+			mutter.repaint();
+		}
+	}
+	
+	//Abstand zwischen Personen bzw. Paerchen und Personen abhangig von der Zeile ueber ihnen
+	public int berechneAbstand(Stammbaum baum, ArrayList<Person[]> paareZeileDruber){
+		ArrayList<Person> schonGehabt = new ArrayList<>();
+		int platzDenJLabelwegnehmen = 0;
+		int anzahl = 1;
+		for(Person paar[] : paareZeileDruber){
+			for(Person p: baum.getKinderZuEltern(paar)){
+				if(baum.getBeziehungsPartner(p) != null && !schonGehabt.contains(baum.getBeziehungsPartner(p))){
+					anzahl++;
+					platzDenJLabelwegnehmen += jlabelsize.width*2;
+					schonGehabt.add(p);
+					schonGehabt.add(baum.getBeziehungsPartner(p));
+				}else if(baum.getBeziehungsPartner(p) == null){
+					schonGehabt.add(p);
+					platzDenJLabelwegnehmen += jlabelsize.width;
+					anzahl++;
+				}
+			}
+		}
+		Dimension sizeOfJPanel = this.getSize();
+		int rest = sizeOfJPanel.width-platzDenJLabelwegnehmen-jlabelsize.width-15*2;
+		return rest/anzahl;
+	}
+	
+	public void zeigeNaechsteZeile(Stammbaum baum, ArrayList<Person[]> paareZeileDruber, int zeile){
+		if(paareZeileDruber.size() == 0){
+			return;
+		}
+		ArrayList<Person> schonGehabt = new ArrayList<>();
+		int abstand = berechneAbstand(baum, paareZeileDruber);
+		Insets insets = this.getInsets();
+		ArrayList<Person[]> paare = new ArrayList<>();
+		int anzPaare = 0;
+		int anzPers = 0;
+		int i =0;
+		for(Person paar[] : paareZeileDruber){
+			for(Person p: baum.getKinderZuEltern(paar)){
+				if(baum.getBeziehungsPartner(p) != null && !schonGehabt.contains(baum.getBeziehungsPartner(p))){
+					JLabel x = createJLabelOfPerson(p);
+					JLabel y = createJLabelOfPerson(baum.getBeziehungsPartner(p));
+					x.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers), insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
+					y.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers) + jlabelsize.width, insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
+					this.add(x);
+					this.add(y);
+					x.repaint();
+					y.repaint();
+					Person[] neuesPaar = {p, baum.getBeziehungsPartner(p)};
+					paare.add(neuesPaar);
+					anzPaare++;
+					schonGehabt.add(p);
+					schonGehabt.add(baum.getBeziehungsPartner(p));
+					i++;
+				}else if(baum.getBeziehungsPartner(p) == null){
+					JLabel x = createJLabelOfPerson(p);
+					x.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers), insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
+					this.add(x);
+					x.repaint();
+					anzPers++;
+					schonGehabt.add(p);
+					i++;
+				}
+			}
+		}
+		zeigeNaechsteZeile(baum, paare, zeile+1);
 	}
 	
 	
@@ -74,12 +167,10 @@ public class CentralFrame extends JPanel {
 		for(Person p : parent.stammbaum.getPersonen()){
 			if(!baum.istInBeziehung(p)){
 				hatMehrPlatz = false;
-				System.out.println("Person ohne Beziehung wird optisch hinzugefuegt: " + p.toString());
 				JLabel personLabel = createJLabelOfPerson(p);
 				Insets insets = this.getInsets();	
-				Dimension size = personLabel.getPreferredSize();
 				Dimension sizeOfJPanel = this.getSize();
-				personLabel.setBounds(sizeOfJPanel.width-size.width-25 + insets.left, 25 + insets.top + personenOhneBeziehung*(size.height+25), size.width, size.height);
+				personLabel.setBounds(sizeOfJPanel.width-jlabelsize.width-15 + insets.left, 15 + insets.top + personenOhneBeziehung*(jlabelsize.height+15),jlabelsize.width, jlabelsize.height);
 				this.add(personLabel);
 				personLabel.repaint();
 				personenOhneBeziehung++;
@@ -88,7 +179,7 @@ public class CentralFrame extends JPanel {
 		return hatMehrPlatz;
 	}
 
-	protected void calculateHead(Stammbaum baum) {
+	protected ArrayList<Person[]> calculateHead(Stammbaum baum) {
 		ArrayList<Person[]> heads = new ArrayList<>();
 		Person head_v = baum.beziehungen.get(0).vater;
 		Person head_m = baum.beziehungen.get(0).mutter;
@@ -114,6 +205,7 @@ public class CentralFrame extends JPanel {
 				}
 			}
 		}
+		return heads;
 	}
 	
 	protected Insets calculateInsets(Insets old){
@@ -133,9 +225,9 @@ public class CentralFrame extends JPanel {
 		infos += "<html>";
 		// Label erstellen
 		JLabel label = new JLabel(infos, SwingConstants.CENTER);
-		label.setMaximumSize(new Dimension(200, 100));
-		label.setMinimumSize(new Dimension(200, 100));
-		label.setPreferredSize(new Dimension(200, 100));
+		label.setMaximumSize(jlabelsize);
+		label.setMinimumSize(jlabelsize);
+		label.setPreferredSize(jlabelsize);
 		label.setVerticalTextPosition(JLabel.CENTER);
 		label.setHorizontalTextPosition(JLabel.RIGHT);
 		label.setBorder(new LineBorder(Color.BLACK, 1, true));
@@ -180,9 +272,9 @@ public class CentralFrame extends JPanel {
 		Image img = icon.getImage();
 		int scale = 0;
 		if(icon.getIconHeight() > icon.getIconWidth()){
-			scale = icon.getIconHeight()/100;
+			scale = (int) (icon.getIconHeight()/jlabelsize.getHeight());
 		}else{
-			scale = icon.getIconWidth()/100;
+			scale = (int) (icon.getIconWidth()/jlabelsize.getHeight());
 		}
 		if (scale != 0) {
 			Image newimg = img.getScaledInstance(icon.getIconWidth()/scale, icon.getIconHeight()/scale, java.awt.Image.SCALE_SMOOTH);
@@ -190,6 +282,33 @@ public class CentralFrame extends JPanel {
 		}
 
 		return icon;
+	}
+	
+	public int print(Graphics g, PageFormat pf, int page) throws PrinterException{
+		if(page > 0){
+			return NO_SUCH_PAGE;
+		}
+		
+		try{
+			double scale = 0.6;
+			Robot robot = new Robot();
+			Rectangle r = new Rectangle(this.getX()+5, this.getY()+50, this.getWidth()-10, this.getHeight()-10);
+			BufferedImage screenShot = robot.createScreenCapture(r);
+			int w = (int) (screenShot.getWidth()*scale);
+			int h = (int) (screenShot.getHeight()*scale);
+			BufferedImage after = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+			AffineTransform scaleInstance = AffineTransform.getScaleInstance(scale, scale);
+		    AffineTransformOp scaleOp = new AffineTransformOp(scaleInstance, AffineTransformOp.TYPE_BILINEAR);
+		    scaleOp.filter(screenShot, after);
+			Graphics2D g2d = (Graphics2D)g;
+			pf.setOrientation(PageFormat.LANDSCAPE);
+			pf.setPaper(PrinterJob.getPrinterJob().defaultPage().getPaper());
+			g2d.translate(pf.getImageableX(), pf.getImageableY());
+			g2d.drawImage(after, 0, 0, null);
+		}catch(AWTException exp){
+			exp.printStackTrace();
+		}
+        return PAGE_EXISTS;
 	}
 
 	// Person hinzufuegen
