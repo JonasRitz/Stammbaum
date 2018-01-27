@@ -73,7 +73,7 @@ public class Mainscreen extends JFrame {
 	}
 	
 	public CentralFrame create_mainframe(){
-		CentralFrame sub = new CentralFrame(this);
+		CentralFrame sub = new CentralFrame(this, this.stammbaum);
 		Border compound = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder());
 		sub.setBorder(compound);
 		Toolkit tk = Toolkit.getDefaultToolkit();

@@ -1,24 +1,24 @@
 package application.stammbaum;
 //private Box box1;
-	//private Box box2;
-	//private Beziehung b;
-	//private boolean draw;
-	//private ArrayList<Box> boxes;
-	//Ziel: Eine Methode, die einen Stammbaum empfaengt und automatisch das passende Abbild davon zeichnen
-	// Konstruktor
-	//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	//this.boxes = new ArrayList<Box>();
-			//this.boxes.add()
-			//box1 = Box.createHorizontalBox();
-			//box1.setAlignmentX(Box.CENTER_ALIGNMENT);
-			//box1.add(Box.createVerticalGlue());
-			
-			//box2 = Box.createHorizontalBox();
-			//box2.setAlignmentX(Box.CENTER_ALIGNMENT);
-			//box2.add(Box.createVerticalGlue());
+//private Box box2;
+//private Beziehung b;
+//private boolean draw;
+//private ArrayList<Box> boxes;
+//Ziel: Eine Methode, die einen Stammbaum empfaengt und automatisch das passende Abbild davon zeichnen
+// Konstruktor
+//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//this.boxes = new ArrayList<Box>();
+//this.boxes.add()
+//box1 = Box.createHorizontalBox();
+//box1.setAlignmentX(Box.CENTER_ALIGNMENT);
+//box1.add(Box.createVerticalGlue());
 
-			//this.add(box1);
-			//this.add(box2);
+//box2 = Box.createHorizontalBox();
+//box2.setAlignmentX(Box.CENTER_ALIGNMENT);
+//box2.add(Box.createVerticalGlue());
+
+//this.add(box1);
+//this.add(box2);
 import java.awt.Insets;
 import java.awt.*;
 import java.awt.event.*;
@@ -34,14 +34,19 @@ public class CentralFrame extends JPanel {
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
-	public CentralFrame(Mainscreen parent){
+	private Stammbaum baum;
+	private ArrayList<Person[]> hierarchie; //erstes Elem = unterstes
+
+	public CentralFrame(Mainscreen parent, Stammbaum baum){
 		this.draw = false;
 		this.setLayout(null);
 		this.parent = parent;
 		this.persons = new HashMap<>();
+		this.hierarchie = new ArrayList<>();
+		this.baum = baum;
 		this.setVisible(true);
 	}
-	
+
 	protected void refreshAll(Stammbaum baum){
 		this.removeAll();
 		int personenOhneBeziehung = 0;
@@ -60,15 +65,67 @@ public class CentralFrame extends JPanel {
 				personenOhneBeziehung++;
 			}
 		}
+		if (this.baum.beziehungen.size() > 0) {
+			calculateHead();
+		}
 		this.setVisible(true);
 		this.parent.repaint();
 		this.parent.setVisible(true);
 	}
-	
+
+	protected void calculateHead() {
+
+		ArrayList<Person[]> heads = new ArrayList<>();
+		Person head_v = this.baum.beziehungen.get(0).vater;
+		Person head_m = this.baum.beziehungen.get(0).mutter;
+		Person[] head = {head_v, head_m};
+		heads.add(head);
+		
+		for (Beziehung b: this.baum.beziehungen) {
+			for (Person p : b.kinder) {
+				boolean found = false;
+				for (Person[] paar: heads) {
+					if (paar[0] == p || paar[1] == p) {
+						heads.remove(paar);
+						Person[] new_head = {b.vater, b.mutter};
+						heads.add(new_head);
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					if (!(b.vater == head[0] && b.mutter == head[1])) {
+						Person[] new_head = {b.vater, b.mutter};
+						heads.add(new_head);
+					}
+				}
+			}
+		}
+	}
+
+
+	/*protected void calculateHead() {
+
+		Person head_v = this.baum.beziehungen.get(0).vater;
+		Person head_m = this.baum.beziehungen.get(0).mutter;
+		for (Beziehung b: this.baum.beziehungen) {
+			for (Person p : b.kinder) {
+				if(p == head_v || p == head_m) {
+					head_v = b.vater;
+					head_m = b.mutter;
+				}
+			}
+		}
+		System.out.println(head_v + " " + head_m);
+	}*/
+
 	protected Insets calculateInsets(Insets old){
+
+
+
 		return null;
 	}
-	
+
 	protected JLabel createJLabelOfPerson(Person p){
 		//Erstellt ein Label an Hand einer Person und fuegt (Person, JLabel) der Hashmap hinzu
 		String src = p.getImageSource();
@@ -97,8 +154,8 @@ public class CentralFrame extends JPanel {
 		return label;
 	}
 
-	
-	
+
+
 	protected void editPerson(Person p) {
 		for (Person pers: this.persons.keySet()) {
 			if (pers == p) {
@@ -122,7 +179,7 @@ public class CentralFrame extends JPanel {
 		}
 		this.parent.repaint();		
 	}
-	
+
 
 	protected ImageIcon setIcon(String file) {
 		ImageIcon icon = new ImageIcon(file);
@@ -133,13 +190,16 @@ public class CentralFrame extends JPanel {
 		}else{
 			scale = icon.getIconWidth()/100;
 		}
-		Image newimg = img.getScaledInstance(icon.getIconWidth()/scale, icon.getIconHeight()/scale, java.awt.Image.SCALE_SMOOTH);
-		icon = new ImageIcon(newimg);
+		if (scale != 0) {
+			Image newimg = img.getScaledInstance(icon.getIconWidth()/scale, icon.getIconHeight()/scale, java.awt.Image.SCALE_SMOOTH);
+			icon = new ImageIcon(newimg);
+		}
+
 		return icon;
 	}
-	
+
 	// Person hinzufuegen
-		/*
+	/*
 		protected void addPerson(Person p) {
 			// Bild auslesen
 			String src = p.getImageSource();
@@ -168,7 +228,7 @@ public class CentralFrame extends JPanel {
 			this.persons.put(p, label);
 			this.parent.setVisible(true);
 		}
-		
+
 		protected void removePerson(Person p) {
 			for (Person pers: this.persons.keySet()) {
 				if (pers == p) {
@@ -179,7 +239,7 @@ public class CentralFrame extends JPanel {
 			}
 			this.parent.repaint();
 		}
-	
+
 	// Beziehung hinzufuegen
 		/*
 		protected void addRelation(Beziehung b) {
@@ -195,13 +255,13 @@ public class CentralFrame extends JPanel {
 			this.parent.repaint();
 			this.parent.setVisible(true);
 		}*/
-		
-	
-	 /*@Override
+
+
+	/*@Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.draw) {
-        	
+
         	Point pos_v = this.persons.get(b.vater).getLocation();
     		Point pos_m = this.persons.get(b.mutter).getLocation();
     		if (pos_v.x > pos_m.x) {
@@ -211,6 +271,6 @@ public class CentralFrame extends JPanel {
     		}
         	this.repaint();
         }
-        
+
     }*/
 }

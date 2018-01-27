@@ -1,8 +1,8 @@
 package application.stammbaum;
 import java.util.*;
 public class Stammbaum{
-	private ArrayList<Person> personen;
-	private ArrayList<Beziehung> beziehungen;
+	protected ArrayList<Person> personen;
+	protected ArrayList<Beziehung> beziehungen;
 	public Stammbaum(){
 		System.out.println("Es wurde ein Stammbaum erzeugt");
 		personen = new ArrayList<>();
