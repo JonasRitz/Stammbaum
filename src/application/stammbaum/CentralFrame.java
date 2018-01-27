@@ -1,47 +1,24 @@
 package application.stammbaum;
-//private Box box1;
-//private Box box2;
-//private Beziehung b;
-//private boolean draw;
-//private ArrayList<Box> boxes;
-//Ziel: Eine Methode, die einen Stammbaum empfaengt und automatisch das passende Abbild davon zeichnen
-// Konstruktor
-//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//this.boxes = new ArrayList<Box>();
-//this.boxes.add()
-//box1 = Box.createHorizontalBox();
-//box1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//box1.add(Box.createVerticalGlue());
-
-//box2 = Box.createHorizontalBox();
-//box2.setAlignmentX(Box.CENTER_ALIGNMENT);
-//box2.add(Box.createVerticalGlue());
-
-//this.add(box1);
-//this.add(box2);
 import java.awt.Insets;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
 import javax.swing.*;
-
 import java.time.format.DateTimeFormatter;
-
 import javax.swing.border.LineBorder;
 
 public class CentralFrame extends JPanel {
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
-	private ArrayList<Person[]> hierarchie; //erstes Elem = unterstes
+	private HashMap<Point, Point> positionen;
 
 	public CentralFrame(Mainscreen parent, Stammbaum baum){
 		this.draw = false;
 		this.setLayout(null);
 		this.parent = parent;
 		this.persons = new HashMap<>();
-		this.hierarchie = new ArrayList<>();
+		this.positionen = new HashMap<>();
 		this.setVisible(true);
 	}
 
@@ -55,13 +32,51 @@ public class CentralFrame extends JPanel {
 	}
 	
 	public void personenMitBeziehungHinzufuegen(Stammbaum baum, boolean hatMehrPlatz){
+		ArrayList<Person[]> heads = null;
 		if (baum.beziehungen.size() > 0) {
-			calculateHead(baum);
+			ArrayList<Person[]> orig = calculateHead(baum);
+			heads = new ArrayList<Person[]>(orig.size());
+			for (Person[] item : orig) {
+				heads.add(item.clone());
+			}
+			this.draw = true;
+			int anzahl = heads.size();
+			Insets insets = this.getInsets();
+			Dimension sizeOfJPanel = this.getSize();
+			for(Person[] p : heads){
+				JLabel personLabel_v = createJLabelOfPerson(p[0]);
+				JLabel personLabel_m = createJLabelOfPerson(p[1]);
+				Dimension size = personLabel_v.getPreferredSize();
+				personLabel_v.setBounds(insets.left+10, 10 + insets.top, size.width, size.height);
+				personLabel_m.setBounds(insets.left+10+2*size.width, 10 + insets.top, size.width, size.height);
+				this.add(personLabel_v);
+				this.add(personLabel_m);
+				this.positionen.put(new Point(insets.left+10, 10 + insets.top), new Point(insets.left+10+2*size.width, 10 + insets.top));
+				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[0].toString());
+				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[1].toString());			
+			}
 		}
 		this.setVisible(true);
 		this.parent.repaint();
 		this.parent.setVisible(true);
 	}
+	
+	@Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (this.draw) {
+        	
+        	for (Point p : this.positionen.keySet()) {
+        		if (p.x > this.positionen.get(p).x) {
+        			g.drawLine(p.x, p.y+50, this.positionen.get(p).x+200, this.positionen.get(p).y+50);
+        		} else {
+        			g.drawLine(p.x+200, p.y+50, this.positionen.get(p).x, this.positionen.get(p).y+50);
+        		}
+            	this.repaint();
+        	}
+        }
+
+    }
 	
 	
 	public boolean personenOhneBeziehungHinzufuegen(Stammbaum baum){
@@ -88,7 +103,7 @@ public class CentralFrame extends JPanel {
 		return hatMehrPlatz;
 	}
 
-	protected void calculateHead(Stammbaum baum) {
+	protected ArrayList<Person[]> calculateHead(Stammbaum baum) {
 
 		ArrayList<Person[]> heads = new ArrayList<>();
 		Person head_v = baum.beziehungen.get(0).vater;
@@ -116,10 +131,7 @@ public class CentralFrame extends JPanel {
 				}
 			}
 		}
-	}
-	
-	protected Insets calculateInsets(Insets old){
-		return null;
+		return heads;
 	}
 
 	protected JLabel createJLabelOfPerson(Person p){
@@ -150,8 +162,6 @@ public class CentralFrame extends JPanel {
 		return label;
 	}
 
-
-
 	protected void editPerson(Person p) {
 		for (Person pers: this.persons.keySet()) {
 			if (pers == p) {
@@ -175,7 +185,6 @@ public class CentralFrame extends JPanel {
 		}
 		this.parent.repaint();		
 	}
-
 
 	protected ImageIcon setIcon(String file) {
 		ImageIcon icon = new ImageIcon(file);
