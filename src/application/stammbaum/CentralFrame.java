@@ -44,12 +44,29 @@ public class CentralFrame extends JPanel {
 	
 	protected void refreshAll(Stammbaum baum){
 		this.removeAll();
+		boolean hatMehrPlatz = personenOhneBeziehungHinzufuegen(baum);
+		personenMitBeziehungHinzufuegen(baum, hatMehrPlatz);
+		this.setVisible(true);
+		this.parent.repaint();
+		this.parent.setVisible(true);
+	}
+	
+	public void personenMitBeziehungHinzufuegen(Stammbaum baum, boolean hatMehrPlatz){
+		
+	}
+	
+	
+	public boolean personenOhneBeziehungHinzufuegen(Stammbaum baum){
+		//iteriert ueber die Personen in einem Stammbaum und fuegt die Person, die nicht Teil 
+		//einer Beziehung sind dem Stammbaum auf der Rechten Seite als Art Liste hinzu liefert 
+		//true wenn eine Hinzugefuegt wurde, ansonsten false, damit man in dem Fall, dass man 
+		//keine Person in einer Beziehung hat mehr Platz benutzen kann
 		int personenOhneBeziehung = 0;
+		boolean hatMehrPlatz = true;
 		for(Person p : parent.stammbaum.getPersonen()){
-			if(baum.istInBeziehung(p)){
-				System.out.println("Person mit Beziehung wird optisch hinzugefuegt.");
-			}else{
-				System.out.println("Person wird optisch hinzugefuegt: " + p.toString());
+			if(!baum.istInBeziehung(p)){
+				hatMehrPlatz = false;
+				System.out.println("Person ohne Beziehung wird optisch hinzugefuegt: " + p.toString());
 				JLabel personLabel = createJLabelOfPerson(p);
 				Insets insets = this.getInsets();	
 				Dimension size = personLabel.getPreferredSize();
@@ -60,13 +77,7 @@ public class CentralFrame extends JPanel {
 				personenOhneBeziehung++;
 			}
 		}
-		this.setVisible(true);
-		this.parent.repaint();
-		this.parent.setVisible(true);
-	}
-	
-	protected Insets calculateInsets(Insets old){
-		return null;
+		return hatMehrPlatz;
 	}
 	
 	protected JLabel createJLabelOfPerson(Person p){
