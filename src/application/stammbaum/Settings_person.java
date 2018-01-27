@@ -33,7 +33,7 @@ public class Settings_person extends JOptionPane {
 		this.main = main;
 		this.frame = main.central;
 		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/3_settings_person.png", 50);
-		JPanel layout = new JPanel(new GridLayout(2,1));
+		JPanel layout = new JPanel();
 		addSelectionList(layout);
 		addSettingsButton(layout);
 	    int result = this.showConfirmDialog(null, layout, "Bearbeite eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
@@ -45,6 +45,8 @@ public class Settings_person extends JOptionPane {
 	public void addSettingsButton(JPanel layout){
 		JButton b = new JButton("Person bearbeiten");
 		layout.add(b);
+		Dimension d = new Dimension(150, 30);
+		b.setSize(d);
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();

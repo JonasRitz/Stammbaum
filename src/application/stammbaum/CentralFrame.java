@@ -51,7 +51,7 @@ public class CentralFrame extends JPanel {
 				personLabel_m.setBounds(insets.left+10+2*size.width, 10 + insets.top, size.width, size.height);
 				this.add(personLabel_v);
 				this.add(personLabel_m);
-				this.positionen.put(new Point(insets.left+10, 10 + insets.top), new Point(insets.left+10+2*size.width, 10 + insets.top));
+				this.positionen.put(new Point(insets.left+10+size.width, 10+insets.top+50), new Point(insets.left+10+2*size.width, 10+insets.top+50));
 				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[0].toString());
 				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[1].toString());			
 			}
@@ -65,13 +65,8 @@ public class CentralFrame extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (this.draw) {
-        	
         	for (Point p : this.positionen.keySet()) {
-        		if (p.x > this.positionen.get(p).x) {
-        			g.drawLine(p.x, p.y+50, this.positionen.get(p).x+200, this.positionen.get(p).y+50);
-        		} else {
-        			g.drawLine(p.x+200, p.y+50, this.positionen.get(p).x, this.positionen.get(p).y+50);
-        		}
+        		g.drawLine(p.x, p.y, this.positionen.get(p).x, this.positionen.get(p).y);
             	this.repaint();
         	}
         }

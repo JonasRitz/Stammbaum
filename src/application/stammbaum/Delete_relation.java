@@ -22,62 +22,68 @@ import java.awt.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Delete_Person extends JOptionPane {
+public class Delete_relation extends JOptionPane {
 	private Stammbaum stammbaum;
 	private CentralFrame central;
-	private ArrayList<Person> zwischenspeicher; // enthaelt alle gelöschten Personen um im Falle von Cancel diese wieder dem Stammbaum hinzuzufuegen
+	private ArrayList<Beziehung> zwischenspeicher; // enthaelt alle gelöschten Personen um im Falle von Cancel diese wieder dem Stammbaum hinzuzufuegen
 	private JList liste;
 	private DefaultListModel model;
 
-	public Delete_Person(Mainscreen main) {
+	public Delete_relation(Mainscreen main) {
 		this.stammbaum = main.stammbaum;
 		this.central = main.central;
-		zwischenspeicher = new ArrayList<Person>();
-		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/2_delete_person.png", 50);
+		zwischenspeicher = new ArrayList<Beziehung>();
+		ImageIcon icon = Mainscreen.resizeImage("src/data/icons/vertical/5_delete_relation.png", 50);
 		JPanel layout = new JPanel();
 		addSelectionList(layout);
 		addRemoveButton(layout);
-	    int result = this.showConfirmDialog(null, layout, "Entferne eine Person: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
+	    int result = this.showConfirmDialog(null, layout, "Entferne eine Beziehung: ", this.OK_CANCEL_OPTION,  this.INFORMATION_MESSAGE, icon);
 	    if (result != this.OK_OPTION) {
-	    	addPersonsAgain();
+	    	addRelationsAgain();
 	    }
 	}
 	
-	public void addPersonsAgain(){
-		for(Person p : zwischenspeicher){
-			stammbaum.personHinzufuegen(p);
+	public void addRelationsAgain(){
+		for(Beziehung b : zwischenspeicher){
+			stammbaum.beziehungHinzufuegen(b);
 			central.refreshAll(stammbaum);
 		}
 	}
 	
 	public void addRemoveButton(JPanel layout){
-		JButton b = new JButton("Person Löschen");
+		JButton b = new JButton("Beziehung Löschen");
+		layout.add(b);
 		Dimension d = new Dimension(150, 30);
 		b.setSize(d);
-		layout.add(b);
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = liste.getSelectedIndex();
 				model.remove(index);
-				zwischenspeicher.add(stammbaum.getPersonen().get(index));
-				stammbaum.personEntfernen(stammbaum.getPersonen().get(index));
+				zwischenspeicher.add(stammbaum.getBeziehungen().get(index));
+				stammbaum.beziehungEntfernen(stammbaum.getBeziehungen().get(index));
 				central.refreshAll(stammbaum);
 			}
 		});
 	}
 	
 	public void addSelectionList(JPanel layout){
-		ArrayList<Person> pers_arr_list = stammbaum.getPersonen();
+		ArrayList<Beziehung> bez_arr_list = stammbaum.getBeziehungen();
 		model = new DefaultListModel();
-		for(Person pers : pers_arr_list){
-			model.addElement(pers.toString());
+		for(Beziehung bez : bez_arr_list){
+			StringBuilder b1 = new StringBuilder("Vater: ");
+			b1.append(bez.getVater()).append(", Mutter: ").append(bez.getMutter()).append(", Kinder: ");
+			for(Person p : bez.getKinder()){
+				if(bez.getKinder().indexOf(p) == bez.getKinder().size()-1){
+					b1.append(p.toString());
+				}else{
+					b1.append(p.toString()).append(", ");
+				}
+			}
+			model.addElement(b1.toString());
 		}
 		liste = new JList(model);
-		//JScrollPane sp = new JScrollPane(liste);
-		//layout.add(sp);
-		//liste.setPreferredSize(new Dimension(150, 50));
 		Border niceBorder = BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(),BorderFactory.createLoweredBevelBorder());
-		Border compound = BorderFactory.createTitledBorder(niceBorder, "Person auswählen");
+		Border compound = BorderFactory.createTitledBorder(niceBorder, "Beziehung auswählen");
 		liste.setBorder(compound);
 		layout.add(liste);
 	}
