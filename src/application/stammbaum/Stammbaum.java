@@ -51,6 +51,10 @@ public class Stammbaum{
 		System.out.println("Es wurde dem Stammbaum eine Beziehung hinzugefuegt.");
 	}
 	
+	public void beziehungEntfernen(Beziehung bez1){
+		beziehungen.remove(bez1);
+	}
+	
 	public ArrayList<Person> getPersonen(){
 		return personen;
 	}

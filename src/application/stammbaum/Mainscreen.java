@@ -19,7 +19,7 @@ public class Mainscreen extends JFrame {
 	private final int DELETE_PERSON = 1;
 	private final int SETTINGS_PERSON = 2;
 	private final int NEW_RELATION = 3;
-	private final int REMOVE_RELATION = 4;
+	private final int DELETE_RELATION = 4;
 	private final int SETTINGS_RELATION = 5;
 	
 	private final int RETURN = 0;
@@ -49,6 +49,8 @@ public class Mainscreen extends JFrame {
 		vertical.get(DELETE_PERSON).removeActionListener(vertical.get(DELETE_PERSON).getActionListeners()[0]);
 		vertical.get(SETTINGS_PERSON).removeActionListener(vertical.get(SETTINGS_PERSON).getActionListeners()[0]);
 		vertical.get(NEW_RELATION).removeActionListener(vertical.get(NEW_RELATION).getActionListeners()[0]);
+		vertical.get(DELETE_RELATION).removeActionListener(vertical.get(DELETE_RELATION).getActionListeners()[0]);
+		
 		horizontal.get(SAVE).removeActionListener(horizontal.get(SAVE).getActionListeners()[0]);
 		horizontal.get(OPEN).removeActionListener(horizontal.get(OPEN).getActionListeners()[0]);
 	}
@@ -58,6 +60,8 @@ public class Mainscreen extends JFrame {
 		vertical.get(DELETE_PERSON).addActionListener(new Delete_person_onclick(this));
 		vertical.get(SETTINGS_PERSON).addActionListener(new Settings_person_onclick(this));
 		vertical.get(NEW_RELATION).addActionListener(new New_relation_onclick(this));
+		vertical.get(DELETE_RELATION).addActionListener(new Delete_relation_onclick(this));
+		
 		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
 		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
 	}
