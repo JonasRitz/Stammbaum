@@ -1,35 +1,20 @@
 package application.stammbaum;
-//private Box box1;
-//private Box box2;
-//private Beziehung b;
-//private boolean draw;
-//private ArrayList<Box> boxes;
-//Ziel: Eine Methode, die einen Stammbaum empfaengt und automatisch das passende Abbild davon zeichnen
-// Konstruktor
-//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//this.boxes = new ArrayList<Box>();
-//this.boxes.add()
-//box1 = Box.createHorizontalBox();
-//box1.setAlignmentX(Box.CENTER_ALIGNMENT);
-//box1.add(Box.createVerticalGlue());
-
-//box2 = Box.createHorizontalBox();
-//box2.setAlignmentX(Box.CENTER_ALIGNMENT);
-//box2.add(Box.createVerticalGlue());
-
-//this.add(box1);
-//this.add(box2);
 import java.awt.Insets;
 import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.awt.event.*;
 import java.util.*;
+<<<<<<< HEAD
 import java.awt.Image.*;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.time.format.DateTimeFormatter;
 import java.awt.*;
+=======
+import javax.swing.*;
+import java.time.format.DateTimeFormatter;
+>>>>>>> db0d5e2ce316243d2718ed302e13578465c7c2a6
 import javax.swing.border.LineBorder;
 import java.awt.print.*;
 import java.io.File;
@@ -41,14 +26,14 @@ public class CentralFrame extends JPanel implements Printable {
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
-	private ArrayList<Person[]> hierarchie; //erstes Elem = unterstes
+	private HashMap<Point, Point> positionen;
 
 	public CentralFrame(Mainscreen parent, Stammbaum baum){
 		this.draw = false;
 		this.setLayout(null);
 		this.parent = parent;
 		this.persons = new HashMap<>();
-		this.hierarchie = new ArrayList<>();
+		this.positionen = new HashMap<>();
 		this.setVisible(true);
 	}
 
@@ -62,11 +47,36 @@ public class CentralFrame extends JPanel implements Printable {
 	}
 	
 	public void personenMitBeziehungHinzufuegen(Stammbaum baum, boolean hatMehrPlatz){
+		ArrayList<Person[]> heads = null;
 		if (baum.beziehungen.size() > 0) {
+<<<<<<< HEAD
 			//ArrayList<Person[]> ersteZeile = calculateHead(baum);
 			ArrayList<Person[]> ersteZeile = baum.getHead();
 			zeigeErsteZeile(ersteZeile);
 			zeigeNaechsteZeile(baum, ersteZeile, 1); //Start der Rekursion
+=======
+			ArrayList<Person[]> orig = calculateHead(baum);
+			heads = new ArrayList<Person[]>(orig.size());
+			for (Person[] item : orig) {
+				heads.add(item.clone());
+			}
+			this.draw = true;
+			int anzahl = heads.size();
+			Insets insets = this.getInsets();
+			Dimension sizeOfJPanel = this.getSize();
+			for(Person[] p : heads){
+				JLabel personLabel_v = createJLabelOfPerson(p[0]);
+				JLabel personLabel_m = createJLabelOfPerson(p[1]);
+				Dimension size = personLabel_v.getPreferredSize();
+				personLabel_v.setBounds(insets.left+10, 10 + insets.top, size.width, size.height);
+				personLabel_m.setBounds(insets.left+10+2*size.width, 10 + insets.top, size.width, size.height);
+				this.add(personLabel_v);
+				this.add(personLabel_m);
+				this.positionen.put(new Point(insets.left+10+size.width, 10+insets.top+50), new Point(insets.left+10+2*size.width, 10+insets.top+50));
+				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[0].toString());
+				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[1].toString());			
+			}
+>>>>>>> db0d5e2ce316243d2718ed302e13578465c7c2a6
 		}
 		this.setVisible(true);
 		this.parent.repaint();
@@ -156,6 +166,18 @@ public class CentralFrame extends JPanel implements Printable {
 		zeigeNaechsteZeile(baum, paare, zeile+1);
 	}
 	
+	@Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (this.draw) {
+        	for (Point p : this.positionen.keySet()) {
+        		g.drawLine(p.x, p.y, this.positionen.get(p).x, this.positionen.get(p).y);
+            	this.repaint();
+        	}
+        }
+
+    }
+	
 	
 	public boolean personenOhneBeziehungHinzufuegen(Stammbaum baum){
 		//iteriert ueber die Personen in einem Stammbaum und fuegt die Person, die nicht Teil 
@@ -206,10 +228,13 @@ public class CentralFrame extends JPanel implements Printable {
 			}
 		}
 		return heads;
+<<<<<<< HEAD
 	}
 	
 	protected Insets calculateInsets(Insets old){
 		return null;
+=======
+>>>>>>> db0d5e2ce316243d2718ed302e13578465c7c2a6
 	}
 
 	protected JLabel createJLabelOfPerson(Person p){
@@ -240,8 +265,6 @@ public class CentralFrame extends JPanel implements Printable {
 		return label;
 	}
 
-
-
 	protected void editPerson(Person p) {
 		for (Person pers: this.persons.keySet()) {
 			if (pers == p) {
@@ -265,7 +288,6 @@ public class CentralFrame extends JPanel implements Printable {
 		}
 		this.parent.repaint();		
 	}
-
 
 	protected ImageIcon setIcon(String file) {
 		ImageIcon icon = new ImageIcon(file);
