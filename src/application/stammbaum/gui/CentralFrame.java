@@ -46,6 +46,8 @@ public class CentralFrame extends JPanel implements Printable {
 	
 	protected void showBeziehungsGeflecht(Stammbaum baum){
 		this.removeAll();
+		this.positionen.clear();
+		this.verbindungen.clear();
 		Insets insets = this.getInsets();
 		Dimension sizeOfJPanel = this.getSize();
 		for(Person p : baum.getPersonen()){
