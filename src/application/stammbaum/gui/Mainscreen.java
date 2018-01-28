@@ -1,7 +1,11 @@
 package application.stammbaum;
 import java.util.regex.Pattern;
+import java.io.IOException;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
+import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
@@ -36,6 +40,8 @@ public class Mainscreen extends JFrame {
 	
 	public Mainscreen() {
 		super("Stammbaumeditor");
+		ImageIcon img = new ImageIcon("src/data/icons/logo.png");
+	  	this.setIconImage(img.getImage());
 		stammbaum = new Stammbaum();
 	  	this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	  	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

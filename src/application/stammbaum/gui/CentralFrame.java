@@ -5,16 +5,13 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.awt.event.*;
 import java.util.*;
-<<<<<<< HEAD
 import java.awt.Image.*;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.time.format.DateTimeFormatter;
 import java.awt.*;
-=======
 import javax.swing.*;
 import java.time.format.DateTimeFormatter;
->>>>>>> db0d5e2ce316243d2718ed302e13578465c7c2a6
 import javax.swing.border.LineBorder;
 import java.awt.print.*;
 import java.io.File;
@@ -22,7 +19,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
 
 public class CentralFrame extends JPanel implements Printable {
-	private Dimension jlabelsize = new Dimension(130,70);
+	private Dimension jlabelsize = new Dimension(138,70);
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
@@ -39,22 +36,21 @@ public class CentralFrame extends JPanel implements Printable {
 
 	protected void refreshAll(Stammbaum baum){
 		this.removeAll();
-		boolean hatMehrPlatz = personenOhneBeziehungHinzufuegen(baum);
-		personenMitBeziehungHinzufuegen(baum, hatMehrPlatz);
+		boolean hatPlatz = personenOhneBeziehungHinzufuegen(baum);
+		personenMitBeziehungHinzufuegen(baum);
 		this.setVisible(true);
 		this.parent.repaint();
 		this.parent.setVisible(true);
 	}
 	
-	public void personenMitBeziehungHinzufuegen(Stammbaum baum, boolean hatMehrPlatz){
+	public void personenMitBeziehungHinzufuegen(Stammbaum baum){
 		ArrayList<Person[]> heads = null;
 		if (baum.beziehungen.size() > 0) {
-<<<<<<< HEAD
 			//ArrayList<Person[]> ersteZeile = calculateHead(baum);
 			ArrayList<Person[]> ersteZeile = baum.getHead();
 			zeigeErsteZeile(ersteZeile);
 			zeigeNaechsteZeile(baum, ersteZeile, 1); //Start der Rekursion
-=======
+			/*
 			ArrayList<Person[]> orig = calculateHead(baum);
 			heads = new ArrayList<Person[]>(orig.size());
 			for (Person[] item : orig) {
@@ -75,8 +71,7 @@ public class CentralFrame extends JPanel implements Printable {
 				this.positionen.put(new Point(insets.left+10+size.width, 10+insets.top+50), new Point(insets.left+10+2*size.width, 10+insets.top+50));
 				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[0].toString());
 				System.out.println("Person mit Beziehung wird optisch hinzugefuegt: " + p[1].toString());			
-			}
->>>>>>> db0d5e2ce316243d2718ed302e13578465c7c2a6
+			}*/
 		}
 		this.setVisible(true);
 		this.parent.repaint();
@@ -84,9 +79,9 @@ public class CentralFrame extends JPanel implements Printable {
 	}
 
 	public void zeigeErsteZeile(ArrayList<Person[]> ersteZeile){
-		Dimension sizeOfJPanel = this.getSize();
 		Insets insets = this.getInsets();
-		int breite = sizeOfJPanel.width-jlabelsize.width-15*2; //abstand 15 nach links und 15 nach rechts von Personen ohne Beziehungen 
+		Dimension sizeOfJPanel = this.getSize();
+		int breite = sizeOfJPanel.width-jlabelsize.width-2*15; //abstand 15 nach links und 15 nach rechts von Personen ohne Beziehungen 
 		int distanz_zwischen_paaren = (breite - jlabelsize.width*2*ersteZeile.size()) / (ersteZeile.size()+1);
 		for(int i=0; i<ersteZeile.size(); i++){
 			JLabel vater = createJLabelOfPerson(ersteZeile.get(i)[0]);
@@ -120,7 +115,7 @@ public class CentralFrame extends JPanel implements Printable {
 			}
 		}
 		Dimension sizeOfJPanel = this.getSize();
-		int rest = sizeOfJPanel.width-platzDenJLabelwegnehmen-jlabelsize.width-15*2;
+		int rest = sizeOfJPanel.width-jlabelsize.width-2*15-platzDenJLabelwegnehmen;
 		return rest/anzahl;
 	}
 	
@@ -178,7 +173,6 @@ public class CentralFrame extends JPanel implements Printable {
 
     }
 	
-	
 	public boolean personenOhneBeziehungHinzufuegen(Stammbaum baum){
 		//iteriert ueber die Personen in einem Stammbaum und fuegt die Person, die nicht Teil 
 		//einer Beziehung sind dem Stammbaum auf der Rechten Seite als Art Liste hinzu liefert 
@@ -228,13 +222,10 @@ public class CentralFrame extends JPanel implements Printable {
 			}
 		}
 		return heads;
-<<<<<<< HEAD
 	}
 	
 	protected Insets calculateInsets(Insets old){
 		return null;
-=======
->>>>>>> db0d5e2ce316243d2718ed302e13578465c7c2a6
 	}
 
 	protected JLabel createJLabelOfPerson(Person p){
@@ -250,11 +241,14 @@ public class CentralFrame extends JPanel implements Printable {
 		infos += "<html>";
 		// Label erstellen
 		JLabel label = new JLabel(infos, SwingConstants.CENTER);
+		label.setFont(label.getFont().deriveFont(9.0f));
 		label.setMaximumSize(jlabelsize);
 		label.setMinimumSize(jlabelsize);
 		label.setPreferredSize(jlabelsize);
 		label.setVerticalTextPosition(JLabel.CENTER);
 		label.setHorizontalTextPosition(JLabel.RIGHT);
+		label.setBackground(Color.LIGHT_GRAY);
+		label.setOpaque(true);
 		label.setBorder(new LineBorder(Color.BLACK, 1, true));
 		if (src != null) {
 			ImageIcon icon = this.setIcon(src);
