@@ -50,7 +50,9 @@ public class Settings_relation_newData extends JOptionPane {
 	    			stammbaum.getBeziehungen().remove(toEdit);
 	    			Beziehung neu = new Beziehung(väter_p.get(vater.getSelectedIndex()),  mütter_p.get(mutter.getSelectedIndex()));
 	    			for(int i : kinder.getSelectedIndices()){
-	    				neu.KindHinzufuegen(kinder_p.get(i));
+	    				if(!neu.getKinder().contains(kinder_p.get(i))){
+	    					neu.KindHinzufuegen(kinder_p.get(i));
+	    				}
 	    			}
 	    			stammbaum.beziehungHinzufuegen(neu);
 	    			central.refreshAll(main.stammbaum);

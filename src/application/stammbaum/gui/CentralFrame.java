@@ -27,7 +27,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
 import java.lang.Math;
 public class CentralFrame extends JPanel implements Printable {
-	private Dimension jlabelsize = new Dimension(138,70);
+	private Dimension jlabelsize = new Dimension(150,70);
 	private Mainscreen parent;
 	private HashMap<Person, JLabel> persons;
 	boolean draw;
@@ -62,6 +62,7 @@ public class CentralFrame extends JPanel implements Printable {
 			this.add(personLabel);
 			
 		}
+
 		JLabel head = new JLabel("Jeder mit Jedem irgendwie");
 		Dimension headsize = head.getPreferredSize(); 
 		head.setBounds(insets.left+(sizeOfJPanel.width/2), insets.top+25, headsize.width, headsize.height);
@@ -320,7 +321,7 @@ public class CentralFrame extends JPanel implements Printable {
 		}
 		this.parent.repaint();		
 	}
-
+	/*
 	protected ImageIcon setIcon(String file) {
 		ImageIcon icon = new ImageIcon(file);
 		Image img = icon.getImage();
@@ -330,11 +331,24 @@ public class CentralFrame extends JPanel implements Printable {
 		}else{
 			scale = (int) (icon.getIconWidth()/jlabelsize.getHeight());
 		}
-		if (scale != 0) {
-			Image newimg = img.getScaledInstance(icon.getIconWidth()/scale, icon.getIconHeight()/scale, java.awt.Image.SCALE_SMOOTH);
+		if(icon.getIconWidth()/scale > (jlabelsize.getWidth()/2) ){
+			Image newimg = img.getScaledInstance((int)(jlabelsize.getWidth()/2.3) ,(int) (jlabelsize.getHeight()/2.3), java.awt.Image.SCALE_SMOOTH);
 			icon = new ImageIcon(newimg);
+		}else{
+			if (scale != 0) {
+				Image newimg = img.getScaledInstance(icon.getIconWidth()/scale, icon.getIconHeight()/scale, java.awt.Image.SCALE_SMOOTH);
+				icon = new ImageIcon(newimg);
+			}
 		}
-
+		return icon;
+	}*/
+	
+	protected ImageIcon setIcon(String file) {
+		ImageIcon icon = new ImageIcon(file);
+		Image img = icon.getImage();
+		double scale = jlabelsize.width/2.4;
+		Image newimg = img.getScaledInstance((int)scale, (int) ((scale/icon.getIconWidth()) * icon.getIconHeight()), java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newimg);
 		return icon;
 	}
 	
