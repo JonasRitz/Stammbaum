@@ -1,4 +1,12 @@
 package application.stammbaum;
+import java.awt.Image;
+import java.awt.color.ColorSpace;
+import java.awt.image.ColorConvertOp;
+import javax.swing.GrayFilter;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import java.awt.Insets;
 import java.awt.*;
 import javax.imageio.ImageIO;
@@ -252,11 +260,35 @@ public class CentralFrame extends JPanel implements Printable {
 		label.setBorder(new LineBorder(Color.BLACK, 1, true));
 		if (src != null) {
 			ImageIcon icon = this.setIcon(src);
+			if(p.getSterbedatum() != null){
+				icon = toGrey(icon);
+			}
 			label.setIcon(icon);
 			label.setIconTextGap(10);
 		}
 		this.persons.put(p, label);
 		return label;
+	}
+	
+	public ImageIcon toGrey(ImageIcon i){
+		Image image = i.getImage();
+		BufferedImage sourceImage = imageToBufferedImage(image);
+		BufferedImage dstImage = null;
+		ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_GRAY);
+		ColorConvertOp op = new ColorConvertOp(colorSpace, null);
+		dstImage = op.filter(sourceImage, dstImage);
+		i = new ImageIcon(dstImage);
+		return i;
+	}
+	
+	public BufferedImage imageToBufferedImage(Image img){
+		 BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		  // Draw the image on to the buffered image
+		 Graphics2D bGr = bimage.createGraphics();
+		 bGr.drawImage(img, 0, 0, null);
+		 bGr.dispose();
+		 // Return the buffered image
+		 return bimage;
 	}
 
 	protected void editPerson(Person p) {
