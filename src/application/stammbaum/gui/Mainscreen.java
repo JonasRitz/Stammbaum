@@ -25,6 +25,7 @@ public class Mainscreen extends JFrame {
 	private final int NEW_RELATION = 3;
 	private final int DELETE_RELATION = 4;
 	private final int SETTINGS_RELATION = 5;
+	protected final int BEZIEHUNGS_GEFLECHT = 6;
 	
 	private final int RETURN = 0;
 	private final int SAVE = 1;
@@ -34,8 +35,8 @@ public class Mainscreen extends JFrame {
 	private final int INFO = 5;
 	private final int MANUAl = 6;
 	
-	private ArrayList<JButton> vertical = new ArrayList<>();
-	private ArrayList<JButton> horizontal = new ArrayList<>();
+	protected ArrayList<JButton> vertical = new ArrayList<>();
+	protected ArrayList<JButton> horizontal = new ArrayList<>();
 	private int button_size = 130;
 	
 	public Mainscreen() {
@@ -57,6 +58,7 @@ public class Mainscreen extends JFrame {
 		vertical.get(NEW_RELATION).removeActionListener(vertical.get(NEW_RELATION).getActionListeners()[0]);
 		vertical.get(DELETE_RELATION).removeActionListener(vertical.get(DELETE_RELATION).getActionListeners()[0]);
 		vertical.get(SETTINGS_RELATION).removeActionListener(vertical.get(SETTINGS_RELATION).getActionListeners()[0]);
+		vertical.get(BEZIEHUNGS_GEFLECHT).removeActionListener(vertical.get(BEZIEHUNGS_GEFLECHT).getActionListeners()[0]);
 		
 		horizontal.get(SAVE).removeActionListener(horizontal.get(SAVE).getActionListeners()[0]);
 		horizontal.get(OPEN).removeActionListener(horizontal.get(OPEN).getActionListeners()[0]);
@@ -70,7 +72,8 @@ public class Mainscreen extends JFrame {
 		vertical.get(NEW_RELATION).addActionListener(new New_relation_onclick(this));
 		vertical.get(DELETE_RELATION).addActionListener(new Delete_relation_onclick(this));
 		vertical.get(SETTINGS_RELATION).addActionListener(new Settings_relation_onclick(this));
-		
+		vertical.get(BEZIEHUNGS_GEFLECHT).addActionListener(new Beziehungsgeflecht_onclick(this));
+
 		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
 		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
 		horizontal.get(PRINT).addActionListener(new Print_onclick(this));

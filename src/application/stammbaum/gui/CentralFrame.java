@@ -25,7 +25,7 @@ import java.awt.print.*;
 import java.io.File;
 import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
-
+import java.lang.Math;
 public class CentralFrame extends JPanel implements Printable {
 	private Dimension jlabelsize = new Dimension(138,70);
 	private Mainscreen parent;
@@ -40,6 +40,33 @@ public class CentralFrame extends JPanel implements Printable {
 		this.persons = new HashMap<>();
 		this.positionen = new HashMap<>();
 		this.setVisible(true);
+	}
+	
+	protected void showBeziehungsGeflecht(Stammbaum baum){
+		this.removeAll();
+		Insets insets = this.getInsets();
+		Dimension sizeOfJPanel = this.getSize();
+		for(Person p : baum.getPersonen()){
+			JLabel personLabel = createJLabelOfPerson(p);
+			int zufallX = (int)((Math.random()) * sizeOfJPanel.width);
+			int zufallY = (int)((Math.random()) * sizeOfJPanel.height);
+			if(zufallX > sizeOfJPanel.width - jlabelsize.width){
+				zufallX -= jlabelsize.width;
+			}
+			if(zufallY > sizeOfJPanel.height - jlabelsize.height){
+				zufallY -= jlabelsize.height;
+			}
+			personLabel.setBounds(insets.left+zufallX, insets.top+zufallY, jlabelsize.width, jlabelsize.height);
+			this.add(personLabel);
+		}
+		JLabel head = new JLabel("Jeder mit Jedem irgendwie");
+		//head.setFont(head.getFont().deriveFont(40.0f));
+		Dimension headsize = head.getSize(); 
+		head.setBounds(insets.left+(sizeOfJPanel.width/2), insets.top+25, headsize.width, headsize.height);
+		this.add(head);
+		this.setVisible(true);
+		this.parent.repaint();
+		this.parent.setVisible(true);
 	}
 
 	protected void refreshAll(Stammbaum baum){
