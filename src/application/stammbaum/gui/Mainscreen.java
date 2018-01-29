@@ -33,7 +33,7 @@ public class Mainscreen extends JFrame {
 	private final int PRINT = 3;
 	private final int ZOOM = 4;
 	private final int INFO = 5;
-	private final int MANUAl = 6;
+	private final int MANUAL= 6;
 	
 	protected ArrayList<JButton> vertical = new ArrayList<>();
 	protected ArrayList<JButton> horizontal = new ArrayList<>();
@@ -60,9 +60,12 @@ public class Mainscreen extends JFrame {
 		vertical.get(SETTINGS_RELATION).removeActionListener(vertical.get(SETTINGS_RELATION).getActionListeners()[0]);
 		vertical.get(BEZIEHUNGS_GEFLECHT).removeActionListener(vertical.get(BEZIEHUNGS_GEFLECHT).getActionListeners()[0]);
 		
+		horizontal.get(RETURN).removeActionListener(horizontal.get(RETURN).getActionListeners()[0]);
 		horizontal.get(SAVE).removeActionListener(horizontal.get(SAVE).getActionListeners()[0]);
 		horizontal.get(OPEN).removeActionListener(horizontal.get(OPEN).getActionListeners()[0]);
 		horizontal.get(PRINT).removeActionListener(horizontal.get(PRINT).getActionListeners()[0]);
+		horizontal.get(INFO).removeActionListener(horizontal.get(INFO).getActionListeners()[0]);
+		horizontal.get(MANUAL).removeActionListener(horizontal.get(MANUAL).getActionListeners()[0]);
 	}
 	
 	public void initialisiere_onClickListener(){
@@ -73,10 +76,13 @@ public class Mainscreen extends JFrame {
 		vertical.get(DELETE_RELATION).addActionListener(new Delete_relation_onclick(this));
 		vertical.get(SETTINGS_RELATION).addActionListener(new Settings_relation_onclick(this));
 		vertical.get(BEZIEHUNGS_GEFLECHT).addActionListener(new Beziehungsgeflecht_onclick(this));
-
+		
+		horizontal.get(RETURN).addActionListener(new Startbildschirm_onclick(this));
 		horizontal.get(SAVE).addActionListener(new Save_onclick(this));
 		horizontal.get(OPEN).addActionListener(new Open_onclick(this));
 		horizontal.get(PRINT).addActionListener(new Print_onclick(this));
+		horizontal.get(INFO).addActionListener(new Impressum_onclick(this));
+		horizontal.get(MANUAL).addActionListener(new Manual_onclick(this));
 	}
 
 	public void initialisiere_alles() {
