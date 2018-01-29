@@ -337,7 +337,7 @@ public class CentralFrame extends JPanel implements Printable {
 		}
 		
 		try{
-			double scale = 0.6;
+			double scale = 0.65;
 			Robot robot = new Robot();
 			Rectangle r = new Rectangle(this.getX()+5, this.getY()+50, this.getWidth()-10, this.getHeight()-10);
 			BufferedImage screenShot = robot.createScreenCapture(r);
