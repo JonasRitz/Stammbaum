@@ -67,7 +67,7 @@ public class CentralFrame extends JPanel implements Printable {
 
 		JLabel head = new JLabel("Jeder mit Jedem irgendwie");
 		Dimension headsize = head.getPreferredSize(); 
-		head.setBounds(insets.left+(sizeOfJPanel.width/2), insets.top+25, headsize.width, headsize.height);
+		head.setBounds(sizeOfJPanel.width/2, insets.top+25, headsize.width, headsize.height);
 		this.add(head);
 		this.setVisible(true);
 		this.parent.repaint();
@@ -212,9 +212,11 @@ public class CentralFrame extends JPanel implements Printable {
 	@Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2));
         if (this.draw) {
         	for (Person p : this.verbindungen.keySet()) {
-        		g.drawLine(this.verbindungen.get(p)[0].x, this.verbindungen.get(p)[0].y, this.verbindungen.get(p)[1].x, this.verbindungen.get(p)[1].y);
+        		g2.drawLine(this.verbindungen.get(p)[0].x, this.verbindungen.get(p)[0].y, this.verbindungen.get(p)[1].x, this.verbindungen.get(p)[1].y);
         	}
         }
     }
