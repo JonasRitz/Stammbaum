@@ -1,4 +1,5 @@
 package application.stammbaum;
+import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -21,6 +22,7 @@ public class Startbildschirm extends JFrame {
 	private JPanel contentPane;
 	public Startbildschirm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ImageIcon img = new ImageIcon("src/data/icons/logo.png");
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int buttonxsize = (int) tk.getScreenSize().getWidth();
 		int buttonysize = (int) tk.getScreenSize().getHeight();
@@ -28,7 +30,7 @@ public class Startbildschirm extends JFrame {
 		int y = buttonysize/3;
 		int width = buttonxsize/3;
 		int height = (int) (buttonysize/2.5);
-		setBounds(x,y,width,height);
+		setBounds(x,y,width+30,height);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 204, 204));
 		//contentPane.setBorder(new EmptyBorder(400/7, 200, 5, 5));
@@ -42,7 +44,7 @@ public class Startbildschirm extends JFrame {
 		lblStammbaumgenerator.setBorder(new EmptyBorder(50,50,50,50));
 		contentPane.add(lblStammbaumgenerator);
 
-		JButton neuer_Stammbaum = new JButton(" Neuen Stammbaum generieren");
+		JButton neuer_Stammbaum = new JButton("Neuen Stammbaum generieren");
 		neuer_Stammbaum.setBackground(new Color(204, 204, 204));
 		neuer_Stammbaum.setForeground(new Color(0, 153, 255));
 		neuer_Stammbaum.setFont(new Font("Lucida Grande", Font.PLAIN, height/20));
@@ -59,8 +61,8 @@ public class Startbildschirm extends JFrame {
 		});
 		contentPane.add(neuer_Stammbaum);
 
-
-		JButton Stammbaum_laden = new JButton("          Stammbaum laden         ");
+ 
+		JButton Stammbaum_laden = new JButton("           Stammbaum laden        ");
 		Stammbaum_laden.setForeground(new Color(0, 153, 255));
 		Stammbaum_laden.setFont(new Font("Lucida Grande", Font.PLAIN, height/20));
 		Stammbaum_laden.setAlignmentX(CENTER_ALIGNMENT);
@@ -77,7 +79,7 @@ public class Startbildschirm extends JFrame {
 		});
 		contentPane.add(Stammbaum_laden);
 
-		JButton Einstellungen = new JButton("                    Hilfe                    ");
+		JButton Einstellungen = new JButton("                     Hilfe                    ");
 		Einstellungen.setBackground(new Color(204, 204, 204));
 		Einstellungen.setForeground(new Color(0, 153, 255));
 		Einstellungen.setFont(new Font("Lucida Grande", Font.PLAIN, height/20));
@@ -94,15 +96,16 @@ public class Startbildschirm extends JFrame {
 			}
 		});
 		contentPane.add(Einstellungen);
-
-		JButton Impressum = new JButton("              Impressum                ");
+ 
+		JButton Impressum = new JButton("               Impressum                ");
 		Impressum.setForeground(new Color(0, 153, 255));
 		Impressum.setFont(new Font("Lucida Grande", Font.PLAIN, height/20));
 		Impressum.setAlignmentX(CENTER_ALIGNMENT);
 		Impressum.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
+					Impressum frame = new Impressum();
+					frame.setVisible(true);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

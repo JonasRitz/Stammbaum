@@ -20,9 +20,8 @@ public class Manual_onclick implements ActionListener{
 		try {
 			Anleitung frame = new Anleitung();
 			frame.setVisible(true);
-			frame.setResizable(false);
-		} catch (Exception exp) {
-			exp.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 }

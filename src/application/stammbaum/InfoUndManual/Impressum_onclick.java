@@ -18,6 +18,11 @@ public class Impressum_onclick implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e){
-			//Impressum imp = new Impressum();
+		try {
+			Impressum frame = new Impressum();
+			frame.setVisible(true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
