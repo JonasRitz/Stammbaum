@@ -30,7 +30,7 @@ public class Main extends JFrame{
 	  EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Startfenster1 frame = new Startfenster1();
+					Startbildschirm frame = new Startbildschirm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

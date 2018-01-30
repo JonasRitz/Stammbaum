@@ -111,8 +111,10 @@ public class CentralFrame extends JPanel implements Printable {
 			mutter.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + jlabelsize.width, insets.top + 15, jlabelsize.width, jlabelsize.height);
 			this.add(vater);
 			this.add(mutter);
-			this.positionen.put(ersteZeile.get(i)[0], new Point(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i, insets.top + 15));
-			this.positionen.put(ersteZeile.get(i)[1], new Point(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + jlabelsize.width, insets.top + 15));
+			System.out.println(vater.getLocation());
+			System.out.println(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + " " + insets.top + 15);
+			this.positionen.put(ersteZeile.get(i)[0], vater.getLocation());
+			this.positionen.put(ersteZeile.get(i)[1], mutter.getLocation());
 			vater.repaint();
 			mutter.repaint();
 		}
@@ -160,10 +162,12 @@ public class CentralFrame extends JPanel implements Printable {
 					JLabel y = createJLabelOfPerson(baum.getBeziehungsPartner(p));
 					x.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers), insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
 					y.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers) + jlabelsize.width, insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
+					//x.getBounds().x-insets.left
+					//x.getBounds().y-insets.top
 					this.add(x);
 					this.add(y);
-					this.positionen.put(p, new Point(insets.left+abstand*(i+1)+jlabelsize.width*(anzPaare*2+anzPers)+jlabelsize.width/2, insets.top+zeile*jlabelsize.height+(zeile+1)*15));
-					this.positionen.put(baum.getBeziehungsPartner(p), new Point(insets.left+abstand*(i+1)+jlabelsize.width*(anzPaare*2+anzPers)+jlabelsize.width+jlabelsize.width/2, insets.top+zeile*jlabelsize.height+(zeile+1)*15));
+					this.positionen.put(p, x.getLocation());
+					this.positionen.put(p, y.getLocation());
 					
 					Point eltern1 = this.positionen.get(paar[0]);
 					Point eltern2 = this.positionen.get(paar[1]);
@@ -189,7 +193,7 @@ public class CentralFrame extends JPanel implements Printable {
 					JLabel x = createJLabelOfPerson(p);
 					x.setBounds(insets.left+abstand*(i+1)+jlabelsize.width*(anzPaare*2+anzPers), insets.top+zeile*jlabelsize.height+(zeile+1)*15, jlabelsize.width, jlabelsize.height);
 					this.add(x);
-					this.positionen.put(p, new Point(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers)+jlabelsize.width/2, insets.top + zeile*jlabelsize.height + (zeile+1)*15));
+					this.positionen.put(p, x.getLocation());
 					
 					Point eltern1 = this.positionen.get(paar[0]);
 					Point eltern2 = this.positionen.get(paar[1]);
