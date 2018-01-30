@@ -74,18 +74,29 @@ public class Settings_person_newData extends JOptionPane {
 		if(year.getSelectedItem()!=null && month.getSelectedItem()!=null && day.getSelectedItem()!=null){
 			geburtsdatum = LocalDate.of((int)year.getSelectedItem(), (int)month.getSelectedItem(), (int)day.getSelectedItem());
 		}
-		
+		boolean geht = true;
 		LocalDate sterbedatum = null;
 		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
 			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)monthDied.getSelectedItem(), (int)dayDied.getSelectedItem());
+			if(geburtsdatum != null){
+				if(sterbedatum.getYear() < geburtsdatum.getYear()){
+					JOptionPane.showMessageDialog(this, "Person kann nicht vor der Geburt verstorben sein.", "", JOptionPane.ERROR_MESSAGE);
+					geht = false;
+				}
+				if(sterbedatum.getYear() == geburtsdatum.getYear() && sterbedatum.getDayOfYear() < geburtsdatum.getDayOfYear()){
+					JOptionPane.showMessageDialog(this, "Person kann nicht vor der Geburt verstorben sein.", "", JOptionPane.ERROR_MESSAGE);
+					geht = false;
+				}
+			}
 		}
-		toEdit.setVorname(vor);
-		toEdit.setNachname(nach);
-		toEdit.setGeschlecht(ges);
-		toEdit.setImageSource(file);
-		toEdit.setGeburtsdatum(geburtsdatum);
-		toEdit.setSterbedatum(sterbedatum);
-		
+		if(geht){
+			toEdit.setVorname(vor);
+			toEdit.setNachname(nach);
+			toEdit.setGeschlecht(ges);
+			toEdit.setImageSource(file);
+			toEdit.setGeburtsdatum(geburtsdatum);
+			toEdit.setSterbedatum(sterbedatum);
+		}
 		centralFrame.refreshAll(stammbaum);
 	}
 	

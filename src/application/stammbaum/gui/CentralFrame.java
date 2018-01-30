@@ -67,7 +67,7 @@ public class CentralFrame extends JPanel implements Printable {
 
 		JLabel head = new JLabel("Jeder mit Jedem irgendwie");
 		Dimension headsize = head.getPreferredSize(); 
-		head.setBounds(insets.left+(sizeOfJPanel.width/2), insets.top+25, headsize.width, headsize.height);
+		head.setBounds(sizeOfJPanel.width/2, insets.top+25, headsize.width, headsize.height);
 		this.add(head);
 		this.setVisible(true);
 		this.parent.repaint();
@@ -107,14 +107,12 @@ public class CentralFrame extends JPanel implements Printable {
 		for(int i=0; i<ersteZeile.size(); i++){
 			JLabel vater = createJLabelOfPerson(ersteZeile.get(i)[0]);
 			JLabel mutter = createJLabelOfPerson(ersteZeile.get(i)[1]);
-			vater.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i, insets.top + 15, jlabelsize.width, jlabelsize.height);
-			mutter.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + jlabelsize.width, insets.top + 15, jlabelsize.width, jlabelsize.height);
+			vater.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i, insets.top + 40, jlabelsize.width, jlabelsize.height);
+			mutter.setBounds(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + jlabelsize.width, insets.top + 40, jlabelsize.width, jlabelsize.height);
 			this.add(vater);
 			this.add(mutter);
-			System.out.println(vater.getLocation());
-			System.out.println(insets.left + distanz_zwischen_paaren*(i+1) + jlabelsize.width*2*i + " " + insets.top + 15);
-			this.positionen.put(ersteZeile.get(i)[0], vater.getLocation());
-			this.positionen.put(ersteZeile.get(i)[1], mutter.getLocation());
+			this.positionen.put(ersteZeile.get(i)[0], new Point(vater.getBounds().x, vater.getBounds().y));
+			this.positionen.put(ersteZeile.get(i)[1], new Point(mutter.getBounds().x, mutter.getBounds().y));
 			vater.repaint();
 			mutter.repaint();
 		}
@@ -156,30 +154,32 @@ public class CentralFrame extends JPanel implements Printable {
 		int anzPers = 0;
 		int i = 0;
 		for(Person paar[] : paareZeileDruber){
+			Point eltern1 = this.positionen.get(paar[0]);
+			Point eltern2 = this.positionen.get(paar[1]);
+			Point tmp = null;
+			if (eltern1.x > eltern2.x) {
+				eltern1.setLocation(eltern1.x, eltern1.y+jlabelsize.height);
+				tmp = eltern1;
+			} else {
+				eltern2.setLocation(eltern2.x, eltern2.y+jlabelsize.height);
+				tmp = eltern2;
+			}
 			for(Person p: baum.getKinderZuEltern(paar)){
 				if(baum.getBeziehungsPartner(p) != null && !schonGehabt.contains(baum.getBeziehungsPartner(p))){
 					JLabel x = createJLabelOfPerson(p);
 					JLabel y = createJLabelOfPerson(baum.getBeziehungsPartner(p));
-					x.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers), insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
-					y.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers) + jlabelsize.width, insets.top + zeile*jlabelsize.height + (zeile+1)*15, jlabelsize.width, jlabelsize.height);
-					//x.getBounds().x-insets.left
-					//x.getBounds().y-insets.top
+					x.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers), insets.top + zeile*jlabelsize.height + (zeile+1)*40, jlabelsize.width, jlabelsize.height);
+					y.setBounds(insets.left + abstand*(i+1) + jlabelsize.width*(anzPaare*2+anzPers) + jlabelsize.width, insets.top + zeile*jlabelsize.height + (zeile+1)*40, jlabelsize.width, jlabelsize.height);
 					this.add(x);
 					this.add(y);
-					this.positionen.put(p, x.getLocation());
-					this.positionen.put(p, y.getLocation());
+					this.positionen.put(p, new Point(x.getBounds().x, x.getBounds().y));
+					this.positionen.put(baum.getBeziehungsPartner(p), new Point(y.getBounds().x, y.getBounds().y));
+
 					
-					Point eltern1 = this.positionen.get(paar[0]);
-					Point eltern2 = this.positionen.get(paar[1]);
-					if (eltern1.x > eltern2.x) {
-						eltern1.setLocation(eltern1.x, eltern1.y+jlabelsize.height);
-						Point[] punkte = {this.positionen.get(p), eltern1};
-						this.verbindungen.put(p, punkte);
-					} else {
-						eltern2.setLocation(eltern2.x, eltern2.y+jlabelsize.height);
-						Point[] punkte = {this.positionen.get(p), eltern2};
-						this.verbindungen.put(p, punkte);
-					}
+					Point kind = this.positionen.get(p);
+					kind.setLocation(kind.x+jlabelsize.width/2, kind.y);
+					Point[] punkte = {kind, tmp};
+					this.verbindungen.put(p, punkte);
 					
 					x.repaint();
 					y.repaint();
@@ -191,21 +191,14 @@ public class CentralFrame extends JPanel implements Printable {
 					i++;
 				}else if(baum.getBeziehungsPartner(p) == null){
 					JLabel x = createJLabelOfPerson(p);
-					x.setBounds(insets.left+abstand*(i+1)+jlabelsize.width*(anzPaare*2+anzPers), insets.top+zeile*jlabelsize.height+(zeile+1)*15, jlabelsize.width, jlabelsize.height);
+					x.setBounds(insets.left+abstand*(i+1)+jlabelsize.width*(anzPaare*2+anzPers), insets.top+zeile*jlabelsize.height+(zeile+1)*40, jlabelsize.width, jlabelsize.height);
 					this.add(x);
-					this.positionen.put(p, x.getLocation());
+					this.positionen.put(p, new Point(x.getBounds().x, x.getBounds().y));
 					
-					Point eltern1 = this.positionen.get(paar[0]);
-					Point eltern2 = this.positionen.get(paar[1]);
-					if (eltern1.x > eltern2.x) {
-						eltern1.setLocation(eltern1.x, eltern1.y+jlabelsize.height);
-						Point[] punkte = {this.positionen.get(p), eltern1};
-						this.verbindungen.put(p, punkte);
-					} else {
-						eltern2.setLocation(eltern2.x, eltern2.y+jlabelsize.height);
-						Point[] punkte = {this.positionen.get(p), eltern2};
-						this.verbindungen.put(p, punkte);
-					}
+					Point kind = this.positionen.get(p);
+					kind.setLocation(kind.x+jlabelsize.width/2, kind.y);
+					Point[] punkte = {kind, tmp};
+					this.verbindungen.put(p, punkte);
 					
 					x.repaint();
 					anzPers++;
@@ -220,9 +213,11 @@ public class CentralFrame extends JPanel implements Printable {
 	@Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2));
         if (this.draw) {
         	for (Person p : this.verbindungen.keySet()) {
-        		g.drawLine(this.verbindungen.get(p)[0].x, this.verbindungen.get(p)[0].y, this.verbindungen.get(p)[1].x, this.verbindungen.get(p)[1].y);
+        		g2.drawLine(this.verbindungen.get(p)[0].x, this.verbindungen.get(p)[0].y, this.verbindungen.get(p)[1].x, this.verbindungen.get(p)[1].y);
         	}
         }
     }
@@ -327,28 +322,7 @@ public class CentralFrame extends JPanel implements Printable {
 		}
 		this.parent.repaint();		
 	}
-	/*
-	protected ImageIcon setIcon(String file) {
-		ImageIcon icon = new ImageIcon(file);
-		Image img = icon.getImage();
-		int scale = 0;
-		if(icon.getIconHeight() > icon.getIconWidth()){
-			scale = (int) (icon.getIconHeight()/jlabelsize.getHeight());
-		}else{
-			scale = (int) (icon.getIconWidth()/jlabelsize.getHeight());
-		}
-		if(icon.getIconWidth()/scale > (jlabelsize.getWidth()/2) ){
-			Image newimg = img.getScaledInstance((int)(jlabelsize.getWidth()/2.3) ,(int) (jlabelsize.getHeight()/2.3), java.awt.Image.SCALE_SMOOTH);
-			icon = new ImageIcon(newimg);
-		}else{
-			if (scale != 0) {
-				Image newimg = img.getScaledInstance(icon.getIconWidth()/scale, icon.getIconHeight()/scale, java.awt.Image.SCALE_SMOOTH);
-				icon = new ImageIcon(newimg);
-			}
-		}
-		return icon;
-	}*/
-	
+
 	protected ImageIcon setIcon(String file) {
 		ImageIcon icon = new ImageIcon(file);
 		Image img = icon.getImage();
@@ -364,7 +338,7 @@ public class CentralFrame extends JPanel implements Printable {
 		}
 		
 		try{
-			double scale = 0.6;
+			double scale = 0.65;
 			Robot robot = new Robot();
 			Rectangle r = new Rectangle(this.getX()+5, this.getY()+50, this.getWidth()-10, this.getHeight()-10);
 			BufferedImage screenShot = robot.createScreenCapture(r);

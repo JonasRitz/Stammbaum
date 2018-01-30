@@ -69,14 +69,26 @@ public class New_Person extends JOptionPane {
 		if(year.getSelectedItem()!=null && month.getSelectedItem()!=null && day.getSelectedItem()!=null){
 			geburtsdatum = LocalDate.of((int)year.getSelectedItem(), (int)month.getSelectedItem(), (int)day.getSelectedItem());
 		}
-		
+		boolean geht = true;
 		LocalDate sterbedatum = null;
 		if(yearDied.getSelectedItem()!=null && monthDied.getSelectedItem()!=null && dayDied.getSelectedItem()!=null){
 			sterbedatum = LocalDate.of((int)yearDied.getSelectedItem(), (int)monthDied.getSelectedItem(), (int)dayDied.getSelectedItem());
+			if(geburtsdatum != null){
+				if(sterbedatum.getYear() < geburtsdatum.getYear()){
+					JOptionPane.showMessageDialog(this, "Person kann nicht vor der Geburt verstorben sein.", "", JOptionPane.ERROR_MESSAGE);
+					geht = false;
+				}
+				if(sterbedatum.getYear() == geburtsdatum.getYear() && sterbedatum.getDayOfYear() < geburtsdatum.getDayOfYear()){
+					JOptionPane.showMessageDialog(this, "Person kann nicht vor der Geburt verstorben sein.", "", JOptionPane.ERROR_MESSAGE);
+					geht = false;
+				}
+			}
 		}
-		Person p1 = new Person(vor, nach, ges, file, geburtsdatum, sterbedatum);
-		stammbaum.personHinzufuegen(p1);
-		central.refreshAll(stammbaum);
+		if(geht){
+			Person p1 = new Person(vor, nach, ges, file, geburtsdatum, sterbedatum);
+			stammbaum.personHinzufuegen(p1);
+			central.refreshAll(stammbaum);
+		}
 	}
 	
 	public void addFields(JPanel layout){
